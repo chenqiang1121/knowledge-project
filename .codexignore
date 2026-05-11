@@ -1,0 +1,57 @@
+# TODO: AI/Codex 上下文忽略清单，减少无关文件检索和上下文占用。
+
+# Java / Maven build outputs
+target/
+*.class
+*.jar
+*.war
+*.ear
+
+# Frontend dependencies and build outputs
+node_modules/
+.next/
+out/
+dist/
+build/
+.turbo/
+.vite/
+coverage/
+
+# Python environments and caches
+.venv/
+venv/
+env/
+__pycache__/
+*.py[cod]
+.pytest_cache/
+.mypy_cache/
+.ruff_cache/
+
+# IDE and editor metadata
+.idea/
+.vscode/
+*.iml
+*.ipr
+*.iws
+
+# Local environment and secrets
+.env
+.env.*
+!.env.example
+application-local.yml
+application-*.local.yml
+
+# Logs and temporary files
+*.log
+*.tmp
+*.temp
+*.cache
+spring-boot-run*.log
+
+# OS files
+.DS_Store
+Thumbs.db
+desktop.ini
+
+# data base data
+postgresql/data/

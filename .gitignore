@@ -1,0 +1,55 @@
+# TODO: Git 忽略清单，避免提交编译产物、本地配置和依赖目录。
+
+# Java / Maven
+target/
+*.class
+*.jar
+*.war
+*.ear
+
+# Node / frontend
+node_modules/
+.next/
+out/
+dist/
+build/
+.turbo/
+.vite/
+coverage/
+
+# Python
+.venv/
+venv/
+env/
+__pycache__/
+*.py[cod]
+.pytest_cache/
+.mypy_cache/
+.ruff_cache/
+
+# IDE / editor
+.idea/
+.vscode/
+*.iml
+*.ipr
+*.iws
+
+# Local env / secrets
+.env
+.env.*
+!.env.example
+application-local.yml
+application-*.local.yml
+postgresql/data/
+
+# Logs / temp
+*.log
+*.tmp
+*.temp
+*.cache
+spring-boot-run*.log
+
+# OS
+.DS_Store
+Thumbs.db
+desktop.ini

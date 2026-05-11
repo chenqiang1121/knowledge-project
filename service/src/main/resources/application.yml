@@ -1,0 +1,35 @@
+# TODO: Spring Boot 配置占位，后续按 dev/test/prod 拆分 profile。
+server:
+  port: 8080
+
+spring:
+  application:
+    name: knowledge-project
+  datasource:
+    # TODO: 替换为真实 PostgreSQL 连接信息。
+    url: jdbc:postgresql://localhost:5432/knowledge_project
+    username: knowledge_user
+    password: knowledge_password
+    driver-class-name: org.postgresql.Driver
+  flyway:
+    # TODO: 接入真实 PostgreSQL 后设置 FLYWAY_ENABLED=true 执行初始化迁移。
+    enabled: ${FLYWAY_ENABLED:false}
+    locations: classpath:db/migration
+
+mybatis-plus:
+  configuration:
+    # TODO: 开发期便于排查 SQL，生产环境按需关闭。
+    log-impl: org.apache.ibatis.logging.stdout.StdOutImpl
+  global-config:
+    db-config:
+      id-type: auto
+
+sa-token:
+  # TODO: 后续替换为安全随机密钥，并配置过期时间、续签策略。
+  token-name: Authorization
+  timeout: 86400
+  active-timeout: -1
+  is-concurrent: true
+  is-share: true
+  token-style: uuid
+  is-log: true
