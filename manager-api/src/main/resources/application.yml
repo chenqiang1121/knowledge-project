@@ -1,19 +1,18 @@
-# TODO: Spring Boot 配置占位，后续按 dev/test/prod 拆分 profile。
 server:
-  port: 8080
+  port: ${MANAGER_API_PORT:8081}
 
 spring:
   application:
-    name: knowledge-project
+    name: manager-api
   datasource:
     # TODO: 替换为真实 PostgreSQL 连接信息。
     url: jdbc:postgresql://localhost:5432/knowledge_project
-    username: knowledge_user
-    password: knowledge_password
+    username: user
+    password: 123456
     driver-class-name: org.postgresql.Driver
   flyway:
     # TODO: 接入真实 PostgreSQL 后设置 FLYWAY_ENABLED=true 执行初始化迁移。
-    enabled: ${FLYWAY_ENABLED:false}
+    enabled: ${FLYWAY_ENABLED:true}
     locations: classpath:db/migration
 
 mybatis-plus:

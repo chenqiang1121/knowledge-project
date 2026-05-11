@@ -1,4 +1,4 @@
-package com.qiang.knowledge.service.config;
+package com.qiang.knowledge.frontapi.config;
 
 import cn.dev33.satoken.interceptor.SaInterceptor;
 import cn.dev33.satoken.router.SaRouter;
@@ -8,7 +8,7 @@ import org.springframework.web.servlet.config.annotation.InterceptorRegistry;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 
 /**
- * TODO: Sa-Token 配置占位，后续补充权限码、角色校验和多端登录策略。
+ * TODO: 用户端 Sa-Token 配置，后续按用户端登录态和公开知识库策略细化。
  */
 @Configuration
 public class SaTokenConfig implements WebMvcConfigurer {
@@ -16,11 +16,10 @@ public class SaTokenConfig implements WebMvcConfigurer {
     @Override
     public void addInterceptors(InterceptorRegistry registry) {
         registry.addInterceptor(new SaInterceptor(handle -> SaRouter
-                .match("/api/**")
-                .notMatch("/api/auth/login")
-                // TODO: 当前只做 Token 验证占位，后续补充细粒度鉴权。
+                .match("/api/knowledge/**")
+                .notMatch("/api/knowledge/search")
+                // TODO: 当前搜索接口公开，详情接口需要登录；后续按文档权限细化。
                 .check(StpUtil::checkLogin)))
-                .addPathPatterns("/api/**");
+                .addPathPatterns("/api/knowledge/**");
     }
 }
-
