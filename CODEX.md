@@ -82,6 +82,9 @@ TODO: 接入真实 PostgreSQL + pgvector 后再打开 Flyway 迁移。
 
 ## Development Notes
 
+- New classes and new files must include notes that describe their purpose, responsibility, and intended usage.
+- New or changed fields and functions must include descriptions so future business requirements are easy to extend.
+- Classes or properties injected into services or configuration classes do not necessarily need notes when their purpose is already clear from the type and constructor.
 - Java 版本目标为 21。
 - Spring Boot 使用 3.x。
 - REST API 路径占位包括：

@@ -4,8 +4,7 @@ import com.baomidou.mybatisplus.core.mapper.BaseMapper;
 import com.qiang.knowledge.service.entity.User;
 
 /**
- * TODO: MyBatis-Plus 用户 Mapper，占位继承 BaseMapper。
+ * MyBatis-Plus mapper for users table access.
  */
 public interface UserMapper extends BaseMapper<User> {
 }
-
