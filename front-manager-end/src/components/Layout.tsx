@@ -10,7 +10,7 @@ export function Layout() {
   const navigate = useNavigate();
   const isSystemRoute = location.pathname.startsWith("/system/");
   const [isSystemOpen, setIsSystemOpen] = useState(isSystemRoute);
-  const showSystemLinks = isSystemOpen || isSystemRoute;
+  const showSystemLinks = isSystemOpen;
   const systemToggleClassName = useMemo(
     () => `nav-parent${isSystemRoute ? " active" : ""}${showSystemLinks ? " open" : ""}`,
     [isSystemRoute, showSystemLinks],
