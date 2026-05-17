@@ -4,6 +4,7 @@ import com.qiang.knowledge.service.common.ApiResult;
 import com.qiang.knowledge.service.entity.Permission;
 import com.qiang.knowledge.service.mapper.PermissionMapper;
 import com.qiang.knowledge.service.search.PermissionSearch;
+import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -61,5 +62,14 @@ public class PermissionService {
     public List<Permission> queryList(PermissionSearch search) {
         PermissionSearch realSearch = search == null ? new PermissionSearch() : search;
         return permissionMapper.selectList(realSearch.build());
+    }
+
+    /**
+     * Queries a page of permissions with conditions built by PermissionSearch.
+     */
+    public Page<Permission> queryPageList(PermissionSearch search) {
+        PermissionSearch realSearch = search == null ? new PermissionSearch() : search;
+        Page<Permission> page = new Page<>(realSearch.getPageIndex(), realSearch.getPageSize());
+        return permissionMapper.selectPage(page, realSearch.build());
     }
 }

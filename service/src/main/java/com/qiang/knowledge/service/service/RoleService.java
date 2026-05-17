@@ -4,6 +4,7 @@ import com.qiang.knowledge.service.common.ApiResult;
 import com.qiang.knowledge.service.entity.Role;
 import com.qiang.knowledge.service.mapper.RoleMapper;
 import com.qiang.knowledge.service.search.RoleSearch;
+import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -61,5 +62,14 @@ public class RoleService {
     public List<Role> queryList(RoleSearch search) {
         RoleSearch realSearch = search == null ? new RoleSearch() : search;
         return roleMapper.selectList(realSearch.build());
+    }
+
+    /**
+     * Queries a page of roles with conditions built by RoleSearch.
+     */
+    public Page<Role> queryPageList(RoleSearch search) {
+        RoleSearch realSearch = search == null ? new RoleSearch() : search;
+        Page<Role> page = new Page<>(realSearch.getPageIndex(), realSearch.getPageSize());
+        return roleMapper.selectPage(page, realSearch.build());
     }
 }

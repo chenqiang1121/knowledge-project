@@ -6,7 +6,7 @@ import com.qiang.knowledge.service.entity.User;
 /**
  * Search POJO for building reusable MyBatis-Plus user query conditions.
  */
-public class UserSearch {
+public class UserSearch extends PageSearch {
 
     /** Optional exact user id filter. */
     private Long id;
@@ -75,4 +75,5 @@ public class UserSearch {
     public void setIsDel(Boolean isDel) {
         this.isDel = isDel;
     }
+
 }

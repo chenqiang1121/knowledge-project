@@ -6,7 +6,7 @@ import com.qiang.knowledge.service.entity.Role;
 /**
  * Search POJO for building reusable MyBatis-Plus role query conditions.
  */
-public class RoleSearch {
+public class RoleSearch extends PageSearch {
 
     /** Optional exact role id filter. */
     private Long id;
@@ -61,4 +61,5 @@ public class RoleSearch {
     public void setIsDel(Boolean isDel) {
         this.isDel = isDel;
     }
+
 }

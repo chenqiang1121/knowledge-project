@@ -4,6 +4,7 @@ import com.qiang.knowledge.service.common.ApiResult;
 import com.qiang.knowledge.service.entity.User;
 import com.qiang.knowledge.service.mapper.UserMapper;
 import com.qiang.knowledge.service.search.UserSearch;
+import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -61,5 +62,14 @@ public class UserService {
     public List<User> queryList(UserSearch search) {
         UserSearch realSearch = search == null ? new UserSearch() : search;
         return userMapper.selectList(realSearch.build());
+    }
+
+    /**
+     * Queries a page of users with conditions built by UserSearch.
+     */
+    public Page<User> queryPageList(UserSearch search) {
+        UserSearch realSearch = search == null ? new UserSearch() : search;
+        Page<User> page = new Page<>(realSearch.getPageIndex(), realSearch.getPageSize());
+        return userMapper.selectPage(page, realSearch.build());
     }
 }

@@ -6,7 +6,7 @@ import com.qiang.knowledge.service.entity.Permission;
 /**
  * Search POJO for building reusable MyBatis-Plus permission query conditions.
  */
-public class PermissionSearch {
+public class PermissionSearch extends PageSearch {
 
     /** Optional exact permission id filter. */
     private Long id;
@@ -89,4 +89,5 @@ public class PermissionSearch {
     public void setIsDel(Boolean isDel) {
         this.isDel = isDel;
     }
+
 }

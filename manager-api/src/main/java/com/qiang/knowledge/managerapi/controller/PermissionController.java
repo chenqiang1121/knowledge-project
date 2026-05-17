@@ -4,6 +4,7 @@ import com.qiang.knowledge.service.common.ApiResult;
 import com.qiang.knowledge.service.entity.Permission;
 import com.qiang.knowledge.service.search.PermissionSearch;
 import com.qiang.knowledge.service.service.PermissionService;
+import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -69,5 +70,13 @@ public class PermissionController {
     @PostMapping("/list")
     public ApiResult<List<Permission>> queryList(@RequestBody(required = false) PermissionSearch search) {
         return ApiResult.success(permissionService.queryList(search));
+    }
+
+    /**
+     * Returns a page of permissions matched by PermissionSearch conditions.
+     */
+    @PostMapping("/page")
+    public ApiResult<Page<Permission>> queryPageList(@RequestBody(required = false) PermissionSearch search) {
+        return ApiResult.success(permissionService.queryPageList(search));
     }
 }

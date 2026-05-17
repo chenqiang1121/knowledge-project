@@ -4,6 +4,7 @@ import com.qiang.knowledge.service.common.ApiResult;
 import com.qiang.knowledge.service.entity.Role;
 import com.qiang.knowledge.service.search.RoleSearch;
 import com.qiang.knowledge.service.service.RoleService;
+import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -69,5 +70,13 @@ public class RoleController {
     @PostMapping("/list")
     public ApiResult<List<Role>> queryList(@RequestBody(required = false) RoleSearch search) {
         return ApiResult.success(roleService.queryList(search));
+    }
+
+    /**
+     * Returns a page of roles matched by RoleSearch conditions.
+     */
+    @PostMapping("/page")
+    public ApiResult<Page<Role>> queryPageList(@RequestBody(required = false) RoleSearch search) {
+        return ApiResult.success(roleService.queryPageList(search));
     }
 }

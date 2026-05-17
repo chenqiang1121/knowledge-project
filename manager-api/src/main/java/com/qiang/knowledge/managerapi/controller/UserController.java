@@ -4,6 +4,7 @@ import com.qiang.knowledge.service.common.ApiResult;
 import com.qiang.knowledge.service.entity.User;
 import com.qiang.knowledge.service.search.UserSearch;
 import com.qiang.knowledge.service.service.UserService;
+import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -69,5 +70,13 @@ public class UserController {
     @PostMapping("/list")
     public ApiResult<List<User>> queryList(@RequestBody(required = false) UserSearch search) {
         return ApiResult.success(userService.queryList(search));
+    }
+
+    /**
+     * Returns a page of users matched by UserSearch conditions.
+     */
+    @PostMapping("/page")
+    public ApiResult<Page<User>> queryPageList(@RequestBody(required = false) UserSearch search) {
+        return ApiResult.success(userService.queryPageList(search));
     }
 }
