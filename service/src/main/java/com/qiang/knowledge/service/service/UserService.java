@@ -4,6 +4,7 @@ import com.qiang.knowledge.service.common.ApiResult;
 import com.qiang.knowledge.service.entity.User;
 import com.qiang.knowledge.service.mapper.UserMapper;
 import com.qiang.knowledge.service.search.UserSearch;
+import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import org.springframework.stereotype.Service;
 
@@ -47,6 +48,17 @@ public class UserService {
      */
     public User getById(Long id) {
         return userMapper.selectById(id);
+    }
+
+    /**
+     * Finds a single active user by username for login validation.
+     */
+    public User getByUsername(String username) {
+        LambdaQueryWrapper<User> queryWrapper = new LambdaQueryWrapper<>();
+        queryWrapper.eq(User::getUsername, username)
+                .eq(User::getIsDel, false)
+                .last("limit 1");
+        return userMapper.selectOne(queryWrapper);
     }
 
     /**

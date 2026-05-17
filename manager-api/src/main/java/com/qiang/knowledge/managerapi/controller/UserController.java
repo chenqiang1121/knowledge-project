@@ -1,10 +1,11 @@
 package com.qiang.knowledge.managerapi.controller;
 
+import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
+import com.qiang.knowledge.managerapi.dto.UserResponse;
 import com.qiang.knowledge.service.common.ApiResult;
 import com.qiang.knowledge.service.entity.User;
 import com.qiang.knowledge.service.search.UserSearch;
 import com.qiang.knowledge.service.service.UserService;
-import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -60,23 +61,27 @@ public class UserController {
      * Returns a user detail by id.
      */
     @GetMapping("/{id}")
-    public ApiResult<User> getById(@PathVariable Long id) {
-        return ApiResult.success(userService.getById(id));
+    public ApiResult<UserResponse> getById(@PathVariable Long id) {
+        return ApiResult.success(UserResponse.from(userService.getById(id)));
     }
 
     /**
      * Returns users matched by UserSearch conditions.
      */
     @PostMapping("/list")
-    public ApiResult<List<User>> queryList(@RequestBody(required = false) UserSearch search) {
-        return ApiResult.success(userService.queryList(search));
+    public ApiResult<List<UserResponse>> queryList(@RequestBody(required = false) UserSearch search) {
+        return ApiResult.success(userService.queryList(search).stream().map(UserResponse::from).toList());
     }
 
     /**
      * Returns a page of users matched by UserSearch conditions.
      */
     @PostMapping("/page")
-    public ApiResult<Page<User>> queryPageList(@RequestBody(required = false) UserSearch search) {
-        return ApiResult.success(userService.queryPageList(search));
+    public ApiResult<Page<UserResponse>> queryPageList(@RequestBody(required = false) UserSearch search) {
+        Page<User> userPage = userService.queryPageList(search);
+        Page<UserResponse> responsePage = new Page<>(userPage.getCurrent(), userPage.getSize(), userPage.getTotal());
+        responsePage.setRecords(userPage.getRecords().stream().map(UserResponse::from).toList());
+        responsePage.setPages(userPage.getPages());
+        return ApiResult.success(responsePage);
     }
 }

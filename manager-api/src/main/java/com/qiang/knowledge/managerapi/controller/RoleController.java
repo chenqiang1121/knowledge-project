@@ -5,6 +5,7 @@ import com.qiang.knowledge.service.entity.Role;
 import com.qiang.knowledge.service.search.RoleSearch;
 import com.qiang.knowledge.service.service.RoleService;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
+import com.qiang.knowledge.managerapi.dto.RolePermissionAssignmentRequest;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -78,5 +79,25 @@ public class RoleController {
     @PostMapping("/page")
     public ApiResult<Page<Role>> queryPageList(@RequestBody(required = false) RoleSearch search) {
         return ApiResult.success(roleService.queryPageList(search));
+    }
+
+    /**
+     * Returns permission ids assigned to a role.
+     */
+    @GetMapping("/{id}/permissions")
+    public ApiResult<List<Long>> queryPermissionIds(@PathVariable Long id) {
+        return ApiResult.success(roleService.queryPermissionIds(id));
+    }
+
+    /**
+     * Replaces all permission ids assigned to a role.
+     */
+    @PutMapping("/{id}/permissions")
+    public ApiResult<Integer> replacePermissionIds(
+            @PathVariable Long id,
+            @RequestBody(required = false) RolePermissionAssignmentRequest request
+    ) {
+        List<Long> permissionIds = request == null ? List.of() : request.getPermissionIds();
+        return roleService.replacePermissionIds(id, permissionIds);
     }
 }

@@ -22,6 +22,8 @@ mybatis-plus:
   global-config:
     db-config:
       id-type: auto
+      logic-not-delete-value: false
+      logic-delete-value: true
 
 sa-token:
   # TODO: 后续替换为安全随机密钥，并配置过期时间、续签策略。

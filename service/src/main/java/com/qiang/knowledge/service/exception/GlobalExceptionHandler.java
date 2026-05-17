@@ -1,12 +1,11 @@
 package com.qiang.knowledge.service.exception;
 
 import cn.dev33.satoken.exception.NotLoginException;
+import com.qiang.knowledge.service.common.ApiResult;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
-
-import java.util.Map;
 
 /**
  * TODO: 全局异常处理占位，后续统一错误码、日志追踪 ID 和国际化消息。
@@ -19,8 +18,8 @@ public class GlobalExceptionHandler {
      */
     @ExceptionHandler(NotLoginException.class)
     @ResponseStatus(HttpStatus.UNAUTHORIZED)
-    public Map<String, String> handleNotLogin(NotLoginException exception) {
-        return Map.of("message", "TODO: token required", "reason", exception.getMessage());
+    public ApiResult<Void> handleNotLogin(NotLoginException exception) {
+        return ApiResult.error(401, "token required: " + exception.getMessage());
     }
 
     /**
@@ -28,8 +27,8 @@ public class GlobalExceptionHandler {
      */
     @ExceptionHandler(Exception.class)
     @ResponseStatus(HttpStatus.INTERNAL_SERVER_ERROR)
-    public Map<String, String> handleException(Exception exception) {
-        return Map.of("message", "TODO: global exception placeholder", "reason", exception.getMessage());
+    public ApiResult<Void> handleException(Exception exception) {
+        return ApiResult.error(500, exception.getMessage());
     }
 }
 

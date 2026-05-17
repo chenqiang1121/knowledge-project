@@ -16,6 +16,12 @@ build/
 .turbo/
 .vite/
 coverage/
+*.tsbuildinfo
+.pnpm-store/
+npm-debug.log*
+pnpm-debug.log*
+yarn-debug.log*
+yarn-error.log*
 
 # Python
 .venv/

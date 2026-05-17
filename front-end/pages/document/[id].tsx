@@ -1,16 +1,20 @@
-import Header from "../../components/Header";
 import { getDocumentDetail } from "../../api/apiClient";
+import Header from "../../components/Header";
+import { useI18n } from "../../i18n/I18nContext";
 
-// TODO: 文档详情页占位，后续根据路由 id 拉取文档详情。
+/**
+ * Public document detail page placeholder for future route-based document loading.
+ */
 export default function DocumentDetailPage() {
+  const { t } = useI18n();
   void getDocumentDetail;
 
   return (
     <main>
       <Header />
       <article>
-        <h1>Document Detail</h1>
-        <p>TODO: 文档详情占位内容</p>
+        <h1>{t("document.title")}</h1>
+        <p>{t("document.detailPlaceholder")}</p>
       </article>
     </main>
   );

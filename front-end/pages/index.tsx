@@ -1,13 +1,18 @@
 import Header from "../components/Header";
+import { useI18n } from "../i18n/I18nContext";
 
-// TODO: 用户端首页占位，后续展示推荐文档、最近更新和搜索入口。
+/**
+ * Public home page placeholder for future recommended documents and search entry.
+ */
 export default function HomePage() {
+  const { t } = useI18n();
+
   return (
     <main>
       <Header />
       <section>
-        <h1>Knowledge Project</h1>
-        <p>TODO: 首页占位内容</p>
+        <h1>{t("home.title")}</h1>
+        <p>{t("home.placeholder")}</p>
       </section>
     </main>
   );

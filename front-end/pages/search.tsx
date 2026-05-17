@@ -1,16 +1,20 @@
-import Header from "../components/Header";
 import { searchKnowledge } from "../api/apiClient";
+import Header from "../components/Header";
+import { useI18n } from "../i18n/I18nContext";
 
-// TODO: 搜索页占位，后续接入输入框、筛选条件和搜索结果列表。
+/**
+ * Public search page placeholder for future query inputs, filters, and results.
+ */
 export default function SearchPage() {
+  const { t } = useI18n();
   void searchKnowledge;
 
   return (
     <main>
       <Header />
       <section>
-        <h1>Search</h1>
-        <p>TODO: 搜索页占位内容</p>
+        <h1>{t("search.title")}</h1>
+        <p>{t("search.placeholder")}</p>
       </section>
     </main>
   );
