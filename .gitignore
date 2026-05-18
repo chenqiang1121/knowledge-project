@@ -46,7 +46,7 @@ __pycache__/
 !.env.example
 application-local.yml
 application-*.local.yml
-postgresql/data/
+docker/postgresql/data/
 
 # Logs / temp
 *.log
