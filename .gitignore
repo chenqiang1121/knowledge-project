@@ -47,7 +47,7 @@ __pycache__/
 application-local.yml
 application-*.local.yml
 docker/postgresql/data/
-docker/redis/*
+docker/redis/**
 
 # Logs / temp
 *.log
