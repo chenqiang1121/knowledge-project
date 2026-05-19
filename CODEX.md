@@ -104,7 +104,8 @@ TODO: 接入真实 PostgreSQL + pgvector 后再打开 Flyway 迁移。
 - 依赖目录：`node_modules/`, `.venv/`, `venv/`, `__pycache__/`
 - IDE 配置：`.idea/`, `.vscode/`, `*.iml`
 - 本地配置：`.env`, `.env.*`, `application-local.yml`
-- 本地数据库数据目录：`postgresql/data/`
+- 本地数据库数据目录：`docker/postgresql/data/`
+- Docker 本地运行数据：`docker/redis/**`
 - 日志和临时文件：`*.log`, `*.tmp`, `*.cache`
 - 操作系统文件：`.DS_Store`, `Thumbs.db`
 
