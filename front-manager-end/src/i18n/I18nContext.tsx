@@ -6,18 +6,6 @@ import { createContext, ReactNode, useContext, useEffect, useMemo, useState } fr
  */
 export type Locale = "en" | "zh-CN";
 
-type TranslationKey = keyof typeof en;
-
-interface I18nContextValue {
-  locale: Locale;
-  setLocale: (locale: Locale) => void;
-  t: (key: TranslationKey) => string;
-}
-
-const STORAGE_KEY = "knowledge_locale";
-const DEFAULT_LOCALE: Locale = "en";
-const SUPPORTED_LOCALES: Locale[] = ["en", "zh-CN"];
-
 const en = {
   "common.actions": "Actions",
   "common.cancel": "Cancel",
@@ -26,10 +14,12 @@ const en = {
   "common.description": "Description",
   "common.edit": "Edit",
   "common.id": "ID",
+  "common.no": "No",
   "common.noParent": "No parent",
   "common.parent": "Parent",
   "common.update": "Update",
   "common.url": "URL",
+  "common.yes": "Yes",
   "dashboard.managerWorkspace": "Manager workspace",
   "dashboard.permissionCardDescription": "Configure menu entries and protected resources.",
   "dashboard.permissionManager": "Permission Manager",
@@ -40,7 +30,7 @@ const en = {
   "dashboard.userManager": "User Manager",
   "language.english": "English",
   "language.label": "Language",
-  "language.chinese": "中文",
+  "language.chinese": "Chinese",
   "layout.brand": "Knowledge Manager",
   "layout.dashboard": "Dashboard",
   "layout.logout": "Logout",
@@ -56,10 +46,14 @@ const en = {
   "login.title": "Knowledge Manager",
   "login.username": "Username",
   "permissions.activeCount": "{count} active permissions",
+  "permissions.componentPath": "TSX path",
   "permissions.failedLoad": "Failed to load permissions",
+  "permissions.isMenu": "Menu",
   "permissions.name": "Name",
+  "permissions.routePath": "Route path",
   "permissions.saved": "Permission saved",
   "permissions.selectParent": "No parent",
+  "permissions.sortOrder": "Sort",
   "permissions.title": "Permissions",
   "roles.activeCount": "{count} active roles",
   "roles.failedLoad": "Failed to load roles",
@@ -84,6 +78,18 @@ const en = {
   "users.userDeleted": "User deleted",
 };
 
+type TranslationKey = keyof typeof en;
+
+interface I18nContextValue {
+  locale: Locale;
+  setLocale: (locale: Locale) => void;
+  t: (key: TranslationKey) => string;
+}
+
+const STORAGE_KEY = "knowledge_locale";
+const DEFAULT_LOCALE: Locale = "en";
+const SUPPORTED_LOCALES: Locale[] = ["en", "zh-CN"];
+
 const zh: Record<TranslationKey, string> = {
   "common.actions": "操作",
   "common.cancel": "取消",
@@ -92,10 +98,12 @@ const zh: Record<TranslationKey, string> = {
   "common.description": "描述",
   "common.edit": "编辑",
   "common.id": "ID",
+  "common.no": "否",
   "common.noParent": "无上级",
   "common.parent": "上级",
   "common.update": "更新",
   "common.url": "URL",
+  "common.yes": "是",
   "dashboard.managerWorkspace": "管理工作台",
   "dashboard.permissionCardDescription": "配置菜单入口和受保护资源。",
   "dashboard.permissionManager": "权限管理",
@@ -122,10 +130,14 @@ const zh: Record<TranslationKey, string> = {
   "login.title": "知识库管理",
   "login.username": "用户名",
   "permissions.activeCount": "{count} 个有效权限",
+  "permissions.componentPath": "TSX 地址",
   "permissions.failedLoad": "权限加载失败",
+  "permissions.isMenu": "菜单",
   "permissions.name": "名称",
+  "permissions.routePath": "路由地址",
   "permissions.saved": "权限已保存",
   "permissions.selectParent": "无上级",
+  "permissions.sortOrder": "排序",
   "permissions.title": "权限",
   "roles.activeCount": "{count} 个有效角色",
   "roles.failedLoad": "角色加载失败",

@@ -65,6 +65,14 @@ public class PermissionController {
     }
 
     /**
+     * Returns the current manager user's role-filtered menu tree.
+     */
+    @GetMapping("/menu")
+    public ApiResult<List<Permission>> queryCurrentUserMenuTree() {
+        return ApiResult.success(permissionService.queryCurrentUserMenuTree());
+    }
+
+    /**
      * Returns permissions matched by PermissionSearch conditions.
      */
     @PostMapping("/list")

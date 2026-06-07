@@ -37,9 +37,14 @@ export interface Permission {
   name: string;
   url?: string;
   parentId?: number;
+  isMenu?: boolean;
+  sortOrder?: number;
+  routePath?: string;
+  componentPath?: string;
   createTime?: string;
   updateTime?: string;
   isDel?: boolean;
+  children?: Permission[];
 }
 
 export interface LoginResponse {

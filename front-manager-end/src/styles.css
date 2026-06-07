@@ -130,6 +130,11 @@ th {
   gap: 8px;
 }
 
+.nav-group {
+  display: grid;
+  gap: 6px;
+}
+
 .nav a,
 .nav-parent {
   padding: 10px 12px;
@@ -198,6 +203,19 @@ th {
 
 .nav-children a {
   padding-left: 18px;
+}
+
+.nav-child-label {
+  display: inline-block;
+}
+
+.nav-error {
+  padding: 10px 12px;
+  border-radius: 6px;
+  color: #ffd1cc;
+  background: rgba(217, 45, 32, 0.16);
+  font-size: 13px;
+  line-height: 1.4;
 }
 
 .workspace {
@@ -355,6 +373,12 @@ th {
   display: flex;
   align-items: center;
   gap: 8px;
+}
+
+.menu-check {
+  min-height: 36px;
+  padding: 0 8px;
+  color: #465467;
 }
 
 @media (max-width: 780px) {

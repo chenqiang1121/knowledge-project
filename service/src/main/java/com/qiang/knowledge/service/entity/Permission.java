@@ -1,10 +1,13 @@
 package com.qiang.knowledge.service.entity;
 
 import com.baomidou.mybatisplus.annotation.IdType;
+import com.baomidou.mybatisplus.annotation.TableField;
 import com.baomidou.mybatisplus.annotation.TableId;
 import com.baomidou.mybatisplus.annotation.TableLogic;
 import com.baomidou.mybatisplus.annotation.TableName;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.time.LocalDateTime;
 
 /**
@@ -26,6 +29,18 @@ public class Permission {
     /** Parent permission id for menu hierarchies. */
     private Long parentId;
 
+    /** Whether this permission should be shown as a manager menu item. */
+    private Boolean isMenu;
+
+    /** Sort order used when rendering menus. */
+    private Integer sortOrder;
+
+    /** Frontend route path used by manager menus. */
+    private String routePath;
+
+    /** Frontend TSX source path used for management visibility. */
+    private String componentPath;
+
     /** Time when the permission row was created. */
     private LocalDateTime createTime;
 
@@ -35,6 +50,10 @@ public class Permission {
     /** Logical delete marker managed by MyBatis-Plus. */
     @TableLogic
     private Boolean isDel;
+
+    /** Nested menu children returned by menu tree APIs. */
+    @TableField(exist = false)
+    private List<Permission> children = new ArrayList<>();
 
     /** Returns the permission primary key. */
     public Long getId() {
@@ -76,6 +95,46 @@ public class Permission {
         this.parentId = parentId;
     }
 
+    /** Returns whether this permission should be shown as a manager menu item. */
+    public Boolean getIsMenu() {
+        return isMenu;
+    }
+
+    /** Sets whether this permission should be shown as a manager menu item. */
+    public void setIsMenu(Boolean isMenu) {
+        this.isMenu = isMenu;
+    }
+
+    /** Returns the sort order used when rendering menus. */
+    public Integer getSortOrder() {
+        return sortOrder;
+    }
+
+    /** Sets the sort order used when rendering menus. */
+    public void setSortOrder(Integer sortOrder) {
+        this.sortOrder = sortOrder;
+    }
+
+    /** Returns the frontend route path used by manager menus. */
+    public String getRoutePath() {
+        return routePath;
+    }
+
+    /** Sets the frontend route path used by manager menus. */
+    public void setRoutePath(String routePath) {
+        this.routePath = routePath;
+    }
+
+    /** Returns the frontend TSX source path. */
+    public String getComponentPath() {
+        return componentPath;
+    }
+
+    /** Sets the frontend TSX source path. */
+    public void setComponentPath(String componentPath) {
+        this.componentPath = componentPath;
+    }
+
     /** Returns the time when the permission row was created. */
     public LocalDateTime getCreateTime() {
         return createTime;
@@ -104,5 +163,15 @@ public class Permission {
     /** Sets the logical delete marker. */
     public void setIsDel(Boolean isDel) {
         this.isDel = isDel;
+    }
+
+    /** Returns nested menu children. */
+    public List<Permission> getChildren() {
+        return children;
+    }
+
+    /** Sets nested menu children. */
+    public void setChildren(List<Permission> children) {
+        this.children = children;
     }
 }

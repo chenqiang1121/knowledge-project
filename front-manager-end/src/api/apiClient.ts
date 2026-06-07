@@ -101,6 +101,10 @@ export function getPermissions(pageIndex = 1, pageSize = 100) {
   });
 }
 
+export function getMenuTree() {
+  return request<Permission[]>("/api/permission/menu");
+}
+
 export function savePermission(permission: Permission) {
   const method = permission.id ? "PUT" : "POST";
   return request<number>("/api/permission", { method, body: JSON.stringify(permission) });

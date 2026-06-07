@@ -5,6 +5,9 @@ import type { Role, User } from "../../../types";
 
 const emptyUser: User = { username: "", password: "", roleId: undefined };
 
+
+// http://localhost:5173/system/users
+
 export function UsersPage() {
   const { t } = useI18n();
   const [users, setUsers] = useState<User[]>([]);

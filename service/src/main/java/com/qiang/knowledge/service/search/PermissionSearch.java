@@ -20,6 +20,15 @@ public class PermissionSearch extends PageSearch {
     /** Optional exact parent permission id filter. */
     private Long parentId;
 
+    /** Optional exact menu display filter. */
+    private Boolean isMenu;
+
+    /** Optional route path fuzzy-match filter. */
+    private String routePath;
+
+    /** Optional component path fuzzy-match filter. */
+    private String componentPath;
+
     /** Optional logical delete state filter. */
     private Boolean isDel;
 
@@ -30,8 +39,12 @@ public class PermissionSearch extends PageSearch {
                 .like(hasText(name), Permission::getName, name)
                 .like(hasText(url), Permission::getUrl, url)
                 .eq(parentId != null, Permission::getParentId, parentId)
+                .eq(isMenu != null, Permission::getIsMenu, isMenu)
+                .like(hasText(routePath), Permission::getRoutePath, routePath)
+                .like(hasText(componentPath), Permission::getComponentPath, componentPath)
                 .eq(isDel != null, Permission::getIsDel, isDel)
-                .orderByDesc(Permission::getId);
+                .orderByAsc(Permission::getSortOrder)
+                .orderByAsc(Permission::getId);
         return queryWrapper;
     }
 
@@ -78,6 +91,36 @@ public class PermissionSearch extends PageSearch {
     /** Sets the optional exact parent permission id filter. */
     public void setParentId(Long parentId) {
         this.parentId = parentId;
+    }
+
+    /** Returns the optional menu display filter. */
+    public Boolean getIsMenu() {
+        return isMenu;
+    }
+
+    /** Sets the optional menu display filter. */
+    public void setIsMenu(Boolean isMenu) {
+        this.isMenu = isMenu;
+    }
+
+    /** Returns the optional route path fuzzy-match filter. */
+    public String getRoutePath() {
+        return routePath;
+    }
+
+    /** Sets the optional route path fuzzy-match filter. */
+    public void setRoutePath(String routePath) {
+        this.routePath = routePath;
+    }
+
+    /** Returns the optional component path fuzzy-match filter. */
+    public String getComponentPath() {
+        return componentPath;
+    }
+
+    /** Sets the optional component path fuzzy-match filter. */
+    public void setComponentPath(String componentPath) {
+        this.componentPath = componentPath;
     }
 
     /** Returns the optional logical delete state filter. */
