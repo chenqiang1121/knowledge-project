@@ -1,9 +1,9 @@
 package com.qiang.knowledge.service.dto;
 
 /**
- * TODO: 用户 DTO 占位，后续按登录、列表、详情等场景拆分。
+ * TODO: 鐢ㄦ埛 DTO 鍗犱綅锛屽悗缁寜鐧诲綍銆佸垪琛ㄣ€佽鎯呯瓑鍦烘櫙鎷嗗垎銆?
  */
-public class UserDTO {
+public class SysUserDTO {
 
     private Long id;
     private String username;

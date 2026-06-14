@@ -1,12 +1,12 @@
 package com.qiang.knowledge.service.search;
 
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
-import com.qiang.knowledge.service.entity.Role;
+import com.qiang.knowledge.service.entity.SysRole;
 
 /**
  * Search POJO for building reusable MyBatis-Plus role query conditions.
  */
-public class RoleSearch extends PageSearch {
+public class SysRoleSearch extends PageSearch {
 
     /** Optional exact role id filter. */
     private Long id;
@@ -18,12 +18,12 @@ public class RoleSearch extends PageSearch {
     private Boolean isDel;
 
     /** Builds the MyBatis-Plus lambda query wrapper for role list queries. */
-    public LambdaQueryWrapper<Role> build() {
-        LambdaQueryWrapper<Role> queryWrapper = new LambdaQueryWrapper<>();
-        queryWrapper.eq(id != null, Role::getId, id)
-                .like(hasText(roleName), Role::getRoleName, roleName)
-                .eq(isDel != null, Role::getIsDel, isDel)
-                .orderByDesc(Role::getId);
+    public LambdaQueryWrapper<SysRole> build() {
+        LambdaQueryWrapper<SysRole> queryWrapper = new LambdaQueryWrapper<>();
+        queryWrapper.eq(id != null, SysRole::getId, id)
+                .like(hasText(roleName), SysRole::getRoleName, roleName)
+                .eq(isDel != null, SysRole::getIsDel, isDel)
+                .orderByDesc(SysRole::getId);
         return queryWrapper;
     }
 

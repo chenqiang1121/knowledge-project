@@ -1,9 +1,9 @@
 import { createContext, ReactNode, useContext, useMemo, useState } from "react";
 import { clearStoredToken, login as loginRequest, logout as logoutRequest, setStoredToken } from "../api/apiClient";
-import type { User } from "../types";
+import type { SysUser } from "../types";
 
 interface AuthContextValue {
-  user: User | null;
+  user: SysUser | null;
   token: string | null;
   isAuthenticated: boolean;
   login: (username: string, password: string) => Promise<void>;
@@ -14,9 +14,9 @@ const AuthContext = createContext<AuthContextValue | null>(null);
 
 export function AuthProvider({ children }: { children: ReactNode }) {
   const [token, setToken] = useState<string | null>(() => localStorage.getItem("knowledge_manager_token"));
-  const [user, setUser] = useState<User | null>(() => {
+  const [user, setUser] = useState<SysUser | null>(() => {
     const raw = localStorage.getItem("knowledge_manager_user");
-    return raw ? (JSON.parse(raw) as User) : null;
+    return raw ? (JSON.parse(raw) as SysUser) : null;
   });
 
   async function login(username: string, password: string) {

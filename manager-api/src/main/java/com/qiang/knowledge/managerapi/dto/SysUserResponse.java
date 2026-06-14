@@ -1,22 +1,22 @@
 package com.qiang.knowledge.managerapi.dto;
 
-import com.qiang.knowledge.service.entity.User;
+import com.qiang.knowledge.service.entity.SysUser;
 
 import java.time.LocalDateTime;
 
 /**
  * Safe user payload for manager API responses that intentionally omits passwords.
  */
-public class UserResponse {
+public class SysUserResponse {
 
-    /** User primary key. */
+    /** SysUser primary key. */
     private Long id;
 
     /** Login and display username. */
     private String username;
 
     /** Assigned role id. */
-    private Long roleId;
+    private Long sysRoleId;
 
     /** Time when the user row was created. */
     private LocalDateTime createTime;
@@ -28,14 +28,14 @@ public class UserResponse {
     private Boolean isDel;
 
     /** Builds a safe response object from a user entity. */
-    public static UserResponse from(User user) {
+    public static SysUserResponse from(SysUser user) {
         if (user == null) {
             return null;
         }
-        UserResponse response = new UserResponse();
+        SysUserResponse response = new SysUserResponse();
         response.setId(user.getId());
         response.setUsername(user.getUsername());
-        response.setRoleId(user.getRoleId());
+        response.setSysRoleId(user.getSysRoleId());
         response.setCreateTime(user.getCreateTime());
         response.setUpdateTime(user.getUpdateTime());
         response.setIsDel(user.getIsDel());
@@ -63,13 +63,13 @@ public class UserResponse {
     }
 
     /** Returns the assigned role id. */
-    public Long getRoleId() {
-        return roleId;
+    public Long getSysRoleId() {
+        return sysRoleId;
     }
 
     /** Sets the assigned role id. */
-    public void setRoleId(Long roleId) {
-        this.roleId = roleId;
+    public void setSysRoleId(Long sysRoleId) {
+        this.sysRoleId = sysRoleId;
     }
 
     /** Returns the create time. */

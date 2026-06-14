@@ -1,4 +1,4 @@
-import type { ApiResult, LoginResponse, PageResult, Permission, Role, User } from "../types";
+import type { ApiResult, LoginResponse, PageResult, SysMenu, SysRole, SysUser } from "../types";
 
 const API_BASE_URL = import.meta.env.VITE_API_BASE_URL ?? "";
 const TOKEN_KEY = "knowledge_manager_token";
@@ -17,7 +17,7 @@ export function clearStoredToken() {
 }
 
 function getRequestFailedMessage(status: number) {
-  return localStorage.getItem(LOCALE_KEY) === "zh-CN" ? `请求失败，状态码 ${status}` : `Request failed with status ${status}`;
+  return localStorage.getItem(LOCALE_KEY) === "zh-CN" ? `璇锋眰澶辫触锛岀姸鎬佺爜 ${status}` : `Request failed with status ${status}`;
 }
 
 async function request<T>(path: string, options: RequestInit = {}): Promise<T> {
@@ -48,68 +48,68 @@ export function logout() {
 }
 
 export function getCurrentUser() {
-  return request<User>("/api/auth/me");
+  return request<SysUser>("/api/auth/me");
 }
 
-export function getUsers(pageIndex = 1, pageSize = 20) {
-  return request<PageResult<User>>("/api/user/page", {
+export function getSysUsers(pageIndex = 1, pageSize = 20) {
+  return request<PageResult<SysUser>>("/api/sys-user/page", {
     method: "POST",
     body: JSON.stringify({ pageIndex, pageSize, isDel: false }),
   });
 }
 
-export function saveUser(user: User) {
+export function saveSysUser(user: SysUser) {
   const method = user.id ? "PUT" : "POST";
-  return request<number>("/api/user", { method, body: JSON.stringify(user) });
+  return request<number>("/api/sys-user", { method, body: JSON.stringify(user) });
 }
 
-export function deleteUser(id: number) {
-  return request<number>(`/api/user/${id}`, { method: "DELETE" });
+export function deleteSysUser(id: number) {
+  return request<number>(`/api/sys-user/${id}`, { method: "DELETE" });
 }
 
-export function getRoles(pageIndex = 1, pageSize = 100) {
-  return request<PageResult<Role>>("/api/role/page", {
+export function getSysRoles(pageIndex = 1, pageSize = 100) {
+  return request<PageResult<SysRole>>("/api/sys-role/page", {
     method: "POST",
     body: JSON.stringify({ pageIndex, pageSize, isDel: false }),
   });
 }
 
-export function saveRole(role: Role) {
+export function saveSysRole(role: SysRole) {
   const method = role.id ? "PUT" : "POST";
-  return request<number>("/api/role", { method, body: JSON.stringify(role) });
+  return request<number>("/api/sys-role", { method, body: JSON.stringify(role) });
 }
 
-export function deleteRole(id: number) {
-  return request<number>(`/api/role/${id}`, { method: "DELETE" });
+export function deleteSysRole(id: number) {
+  return request<number>(`/api/sys-role/${id}`, { method: "DELETE" });
 }
 
-export function getRolePermissions(roleId: number) {
-  return request<number[]>(`/api/role/${roleId}/permissions`);
+export function getSysRoleMenus(sysRoleId: number) {
+  return request<number[]>(`/api/sys-role/${sysRoleId}/menus`);
 }
 
-export function saveRolePermissions(roleId: number, permissionIds: number[]) {
-  return request<number>(`/api/role/${roleId}/permissions`, {
+export function saveSysRoleMenus(sysRoleId: number, sysMenuIds: number[]) {
+  return request<number>(`/api/sys-role/${sysRoleId}/menus`, {
     method: "PUT",
-    body: JSON.stringify({ permissionIds }),
+    body: JSON.stringify({ sysMenuIds }),
   });
 }
 
-export function getPermissions(pageIndex = 1, pageSize = 100) {
-  return request<PageResult<Permission>>("/api/permission/page", {
+export function getSysMenus(pageIndex = 1, pageSize = 100) {
+  return request<PageResult<SysMenu>>("/api/sys-menu/page", {
     method: "POST",
     body: JSON.stringify({ pageIndex, pageSize, isDel: false }),
   });
 }
 
-export function getMenuTree() {
-  return request<Permission[]>("/api/permission/menu");
+export function getSysMenuTree() {
+  return request<SysMenu[]>("/api/sys-menu/tree");
 }
 
-export function savePermission(permission: Permission) {
+export function saveSysMenu(permission: SysMenu) {
   const method = permission.id ? "PUT" : "POST";
-  return request<number>("/api/permission", { method, body: JSON.stringify(permission) });
+  return request<number>("/api/sys-menu", { method, body: JSON.stringify(permission) });
 }
 
-export function deletePermission(id: number) {
-  return request<number>(`/api/permission/${id}`, { method: "DELETE" });
+export function deleteSysMenu(id: number) {
+  return request<number>(`/api/sys-menu/${id}`, { method: "DELETE" });
 }

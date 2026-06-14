@@ -3,10 +3,10 @@ package com.qiang.knowledge.managerapi.controller;
 import cn.dev33.satoken.stp.StpUtil;
 import com.qiang.knowledge.managerapi.dto.LoginRequest;
 import com.qiang.knowledge.managerapi.dto.LoginResponse;
-import com.qiang.knowledge.managerapi.dto.UserResponse;
+import com.qiang.knowledge.managerapi.dto.SysUserResponse;
 import com.qiang.knowledge.service.common.ApiResult;
-import com.qiang.knowledge.service.entity.User;
-import com.qiang.knowledge.service.service.UserService;
+import com.qiang.knowledge.service.entity.SysUser;
+import com.qiang.knowledge.service.service.SysUserService;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -20,12 +20,12 @@ import org.springframework.web.bind.annotation.RestController;
 @RequestMapping("/api")
 public class ManagerController {
 
-    private final UserService userService;
+    private final SysUserService userService;
 
     /**
      * Builds the authentication controller with the user business service.
      */
-    public ManagerController(UserService userService) {
+    public ManagerController(SysUserService userService) {
         this.userService = userService;
     }
 
@@ -37,12 +37,12 @@ public class ManagerController {
         if (request == null || !hasText(request.getUsername()) || !hasText(request.getPassword())) {
             return ApiResult.error(400, "username and password are required");
         }
-        User user = userService.getByUsername(request.getUsername().trim());
+        SysUser user = userService.getByUsername(request.getUsername().trim());
         if (user == null || user.getPassword() == null || !user.getPassword().equals(request.getPassword())) {
             return ApiResult.error(401, "invalid username or password");
         }
         StpUtil.login(user.getId());
-        LoginResponse response = new LoginResponse(StpUtil.getTokenValue(), UserResponse.from(user));
+        LoginResponse response = new LoginResponse(StpUtil.getTokenValue(), SysUserResponse.from(user));
         return ApiResult.success(response);
     }
 
@@ -59,9 +59,9 @@ public class ManagerController {
      * Returns the authenticated manager user's safe profile.
      */
     @GetMapping("/auth/me")
-    public ApiResult<UserResponse> currentUser() {
+    public ApiResult<SysUserResponse> currentUser() {
         Long userId = Long.valueOf(String.valueOf(StpUtil.getLoginId()));
-        return ApiResult.success(UserResponse.from(userService.getById(userId)));
+        return ApiResult.success(SysUserResponse.from(userService.getById(userId)));
     }
 
     /**

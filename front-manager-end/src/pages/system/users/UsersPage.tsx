@@ -1,23 +1,23 @@
 import { FormEvent, useEffect, useState } from "react";
-import { deleteUser, getRoles, getUsers, saveUser } from "../../../api/apiClient";
+import { deleteSysUser, getSysRoles, getSysUsers, saveSysUser } from "../../../api/apiClient";
 import { formatMessage, useI18n } from "../../../i18n/I18nContext";
-import type { Role, User } from "../../../types";
+import type { SysRole, SysUser } from "../../../types";
 
-const emptyUser: User = { username: "", password: "", roleId: undefined };
+const emptyUser: SysUser = { username: "", password: "", sysRoleId: undefined };
 
 
 // http://localhost:5173/system/users
 
 export function UsersPage() {
   const { t } = useI18n();
-  const [users, setUsers] = useState<User[]>([]);
-  const [roles, setRoles] = useState<Role[]>([]);
-  const [form, setForm] = useState<User>(emptyUser);
+  const [users, setUsers] = useState<SysUser[]>([]);
+  const [roles, setRoles] = useState<SysRole[]>([]);
+  const [form, setForm] = useState<SysUser>(emptyUser);
   const [message, setMessage] = useState("");
   const [error, setError] = useState("");
 
   async function load() {
-    const [userPage, rolePage] = await Promise.all([getUsers(), getRoles()]);
+    const [userPage, rolePage] = await Promise.all([getSysUsers(), getSysRoles()]);
     setUsers(userPage.records);
     setRoles(rolePage.records);
   }
@@ -29,12 +29,12 @@ export function UsersPage() {
   async function handleSubmit(event: FormEvent) {
     event.preventDefault();
     setError("");
-    const payload = { ...form, roleId: form.roleId ? Number(form.roleId) : undefined };
+    const payload = { ...form, sysRoleId: form.sysRoleId ? Number(form.sysRoleId) : undefined };
     if (payload.id && !payload.password) {
       delete payload.password;
     }
     try {
-      await saveUser(payload);
+      await saveSysUser(payload);
       setForm(emptyUser);
       setMessage(t("users.saved"));
       await load();
@@ -47,7 +47,7 @@ export function UsersPage() {
     if (!id) {
       return;
     }
-    await deleteUser(id);
+    await deleteSysUser(id);
     setMessage(t("users.userDeleted"));
     await load();
   }
@@ -66,7 +66,7 @@ export function UsersPage() {
           value={form.password ?? ""}
           onChange={(event) => setForm({ ...form, password: event.target.value })}
         />
-        <select value={form.roleId ?? ""} onChange={(event) => setForm({ ...form, roleId: Number(event.target.value) || undefined })}>
+        <select value={form.sysRoleId ?? ""} onChange={(event) => setForm({ ...form, sysRoleId: Number(event.target.value) || undefined })}>
           <option value="">{t("users.selectRole")}</option>
           {roles.map((role) => (
             <option key={role.id} value={role.id}>
@@ -97,7 +97,7 @@ export function UsersPage() {
             <tr key={user.id}>
               <td>{user.id}</td>
               <td>{user.username}</td>
-              <td>{roles.find((role) => role.id === user.roleId)?.roleName ?? user.roleId ?? "-"}</td>
+              <td>{roles.find((role) => role.id === user.sysRoleId)?.roleName ?? user.sysRoleId ?? "-"}</td>
               <td className="actions">
                 <button type="button" onClick={() => setForm({ ...user, password: "" })}>
                   {t("common.edit")}

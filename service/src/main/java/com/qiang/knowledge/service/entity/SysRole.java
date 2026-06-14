@@ -8,12 +8,12 @@ import com.baomidou.mybatisplus.annotation.TableName;
 import java.time.LocalDateTime;
 
 /**
- * Role table entity used to group users and describe their authorization scope.
+ * SysRole table entity used to group users and describe their authorization scope.
  */
-@TableName("roles")
-public class Role {
+@TableName("sys_role")
+public class SysRole {
 
-    /** Role primary key. */
+    /** SysRole primary key. */
     @TableId(type = IdType.AUTO)
     private Long id;
 

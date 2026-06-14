@@ -1,11 +1,11 @@
 package com.qiang.knowledge.managerapi.controller;
 
 import com.qiang.knowledge.service.common.ApiResult;
-import com.qiang.knowledge.service.entity.Role;
-import com.qiang.knowledge.service.search.RoleSearch;
-import com.qiang.knowledge.service.service.RoleService;
+import com.qiang.knowledge.service.entity.SysRole;
+import com.qiang.knowledge.service.search.SysRoleSearch;
+import com.qiang.knowledge.service.service.SysRoleService;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
-import com.qiang.knowledge.managerapi.dto.RolePermissionAssignmentRequest;
+import com.qiang.knowledge.managerapi.dto.SysRoleMenuAssignmentRequest;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -21,15 +21,15 @@ import java.util.List;
  * Manager API controller for role create, update, delete, detail, and list operations.
  */
 @RestController
-@RequestMapping("/api/role")
-public class RoleController {
+@RequestMapping("/api/sys-role")
+public class SysRoleController {
 
-    private final RoleService roleService;
+    private final SysRoleService roleService;
 
     /**
      * Builds the controller with the role business service.
      */
-    public RoleController(RoleService roleService) {
+    public SysRoleController(SysRoleService roleService) {
         this.roleService = roleService;
     }
 
@@ -37,7 +37,7 @@ public class RoleController {
      * Creates a role and returns the affected row count.
      */
     @PostMapping
-    public ApiResult<Integer> create(@RequestBody Role role) {
+    public ApiResult<Integer> create(@RequestBody SysRole role) {
         return roleService.create(role);
     }
 
@@ -45,7 +45,7 @@ public class RoleController {
      * Updates a role by id and returns the affected row count.
      */
     @PutMapping
-    public ApiResult<Integer> update(@RequestBody Role role) {
+    public ApiResult<Integer> update(@RequestBody SysRole role) {
         return roleService.update(role);
     }
 
@@ -61,43 +61,43 @@ public class RoleController {
      * Returns a role detail by id.
      */
     @GetMapping("/{id}")
-    public ApiResult<Role> getById(@PathVariable Long id) {
+    public ApiResult<SysRole> getById(@PathVariable Long id) {
         return ApiResult.success(roleService.getById(id));
     }
 
     /**
-     * Returns roles matched by RoleSearch conditions.
+     * Returns roles matched by SysRoleSearch conditions.
      */
     @PostMapping("/list")
-    public ApiResult<List<Role>> queryList(@RequestBody(required = false) RoleSearch search) {
+    public ApiResult<List<SysRole>> queryList(@RequestBody(required = false) SysRoleSearch search) {
         return ApiResult.success(roleService.queryList(search));
     }
 
     /**
-     * Returns a page of roles matched by RoleSearch conditions.
+     * Returns a page of roles matched by SysRoleSearch conditions.
      */
     @PostMapping("/page")
-    public ApiResult<Page<Role>> queryPageList(@RequestBody(required = false) RoleSearch search) {
+    public ApiResult<Page<SysRole>> queryPageList(@RequestBody(required = false) SysRoleSearch search) {
         return ApiResult.success(roleService.queryPageList(search));
     }
 
     /**
      * Returns permission ids assigned to a role.
      */
-    @GetMapping("/{id}/permissions")
-    public ApiResult<List<Long>> queryPermissionIds(@PathVariable Long id) {
-        return ApiResult.success(roleService.queryPermissionIds(id));
+    @GetMapping("/{id}/menus")
+    public ApiResult<List<Long>> querySysMenuIds(@PathVariable Long id) {
+        return ApiResult.success(roleService.querySysMenuIds(id));
     }
 
     /**
      * Replaces all permission ids assigned to a role.
      */
-    @PutMapping("/{id}/permissions")
-    public ApiResult<Integer> replacePermissionIds(
+    @PutMapping("/{id}/menus")
+    public ApiResult<Integer> replaceSysMenuIds(
             @PathVariable Long id,
-            @RequestBody(required = false) RolePermissionAssignmentRequest request
+            @RequestBody(required = false) SysRoleMenuAssignmentRequest request
     ) {
-        List<Long> permissionIds = request == null ? List.of() : request.getPermissionIds();
-        return roleService.replacePermissionIds(id, permissionIds);
+        List<Long> sysMenuIds = request == null ? List.of() : request.getSysMenuIds();
+        return roleService.replaceSysMenuIds(id, sysMenuIds);
     }
 }

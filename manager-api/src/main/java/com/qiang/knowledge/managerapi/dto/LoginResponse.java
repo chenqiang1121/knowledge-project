@@ -9,14 +9,14 @@ public class LoginResponse {
     private String token;
 
     /** Safe user payload for the authenticated account. */
-    private UserResponse user;
+    private SysUserResponse user;
 
     /** Creates an empty response for framework serialization. */
     public LoginResponse() {
     }
 
     /** Creates a response with a token and user payload. */
-    public LoginResponse(String token, UserResponse user) {
+    public LoginResponse(String token, SysUserResponse user) {
         this.token = token;
         this.user = user;
     }
@@ -32,12 +32,12 @@ public class LoginResponse {
     }
 
     /** Returns the safe user payload. */
-    public UserResponse getUser() {
+    public SysUserResponse getUser() {
         return user;
     }
 
     /** Sets the safe user payload. */
-    public void setUser(UserResponse user) {
+    public void setUser(SysUserResponse user) {
         this.user = user;
     }
 }

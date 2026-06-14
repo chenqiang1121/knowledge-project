@@ -11,16 +11,16 @@ import java.util.List;
 import java.time.LocalDateTime;
 
 /**
- * Permission table entity used to describe menu nodes or protected resources.
+ * SysMenu table entity used to describe menu nodes or protected resources.
  */
-@TableName("permissions")
-public class Permission {
+@TableName("sys_menu")
+public class SysMenu {
 
-    /** Permission primary key. */
+    /** SysMenu primary key. */
     @TableId(type = IdType.AUTO)
     private Long id;
 
-    /** Permission or menu display name. */
+    /** SysMenu or menu display name. */
     private String name;
 
     /** Frontend URL or protected resource path. */
@@ -53,7 +53,7 @@ public class Permission {
 
     /** Nested menu children returned by menu tree APIs. */
     @TableField(exist = false)
-    private List<Permission> children = new ArrayList<>();
+    private List<SysMenu> children = new ArrayList<>();
 
     /** Returns the permission primary key. */
     public Long getId() {
@@ -166,12 +166,12 @@ public class Permission {
     }
 
     /** Returns nested menu children. */
-    public List<Permission> getChildren() {
+    public List<SysMenu> getChildren() {
         return children;
     }
 
     /** Sets nested menu children. */
-    public void setChildren(List<Permission> children) {
+    public void setChildren(List<SysMenu> children) {
         this.children = children;
     }
 }

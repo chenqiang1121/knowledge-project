@@ -1,12 +1,12 @@
 package com.qiang.knowledge.service.search;
 
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
-import com.qiang.knowledge.service.entity.User;
+import com.qiang.knowledge.service.entity.SysUser;
 
 /**
  * Search POJO for building reusable MyBatis-Plus user query conditions.
  */
-public class UserSearch extends PageSearch {
+public class SysUserSearch extends PageSearch {
 
     /** Optional exact user id filter. */
     private Long id;
@@ -15,19 +15,19 @@ public class UserSearch extends PageSearch {
     private String username;
 
     /** Optional exact role id filter. */
-    private Long roleId;
+    private Long sysRoleId;
 
     /** Optional logical delete state filter. */
     private Boolean isDel;
 
     /** Builds the MyBatis-Plus lambda query wrapper for user list queries. */
-    public LambdaQueryWrapper<User> build() {
-        LambdaQueryWrapper<User> queryWrapper = new LambdaQueryWrapper<>();
-        queryWrapper.eq(id != null, User::getId, id)
-                .like(hasText(username), User::getUsername, username)
-                .eq(roleId != null, User::getRoleId, roleId)
-                .eq(isDel != null, User::getIsDel, isDel)
-                .orderByDesc(User::getId);
+    public LambdaQueryWrapper<SysUser> build() {
+        LambdaQueryWrapper<SysUser> queryWrapper = new LambdaQueryWrapper<>();
+        queryWrapper.eq(id != null, SysUser::getId, id)
+                .like(hasText(username), SysUser::getUsername, username)
+                .eq(sysRoleId != null, SysUser::getSysRoleId, sysRoleId)
+                .eq(isDel != null, SysUser::getIsDel, isDel)
+                .orderByDesc(SysUser::getId);
         return queryWrapper;
     }
 
@@ -57,13 +57,13 @@ public class UserSearch extends PageSearch {
     }
 
     /** Returns the optional exact role id filter. */
-    public Long getRoleId() {
-        return roleId;
+    public Long getSysRoleId() {
+        return sysRoleId;
     }
 
     /** Sets the optional exact role id filter. */
-    public void setRoleId(Long roleId) {
-        this.roleId = roleId;
+    public void setSysRoleId(Long sysRoleId) {
+        this.sysRoleId = sysRoleId;
     }
 
     /** Returns the optional logical delete state filter. */

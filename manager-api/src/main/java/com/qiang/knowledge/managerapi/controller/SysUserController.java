@@ -1,11 +1,11 @@
 package com.qiang.knowledge.managerapi.controller;
 
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
-import com.qiang.knowledge.managerapi.dto.UserResponse;
+import com.qiang.knowledge.managerapi.dto.SysUserResponse;
 import com.qiang.knowledge.service.common.ApiResult;
-import com.qiang.knowledge.service.entity.User;
-import com.qiang.knowledge.service.search.UserSearch;
-import com.qiang.knowledge.service.service.UserService;
+import com.qiang.knowledge.service.entity.SysUser;
+import com.qiang.knowledge.service.search.SysUserSearch;
+import com.qiang.knowledge.service.service.SysUserService;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -21,15 +21,15 @@ import java.util.List;
  * Manager API controller for user create, update, delete, detail, and list operations.
  */
 @RestController
-@RequestMapping("/api/user")
-public class UserController {
+@RequestMapping("/api/sys-user")
+public class SysUserController {
 
-    private final UserService userService;
+    private final SysUserService userService;
 
     /**
      * Builds the controller with the user business service.
      */
-    public UserController(UserService userService) {
+    public SysUserController(SysUserService userService) {
         this.userService = userService;
     }
 
@@ -37,7 +37,7 @@ public class UserController {
      * Creates a user and returns the affected row count.
      */
     @PostMapping
-    public ApiResult<Integer> create(@RequestBody User user) {
+    public ApiResult<Integer> create(@RequestBody SysUser user) {
         return userService.create(user);
     }
 
@@ -45,7 +45,7 @@ public class UserController {
      * Updates a user by id and returns the affected row count.
      */
     @PutMapping
-    public ApiResult<Integer> update(@RequestBody User user) {
+    public ApiResult<Integer> update(@RequestBody SysUser user) {
         return userService.update(user);
     }
 
@@ -61,26 +61,26 @@ public class UserController {
      * Returns a user detail by id.
      */
     @GetMapping("/{id}")
-    public ApiResult<UserResponse> getById(@PathVariable Long id) {
-        return ApiResult.success(UserResponse.from(userService.getById(id)));
+    public ApiResult<SysUserResponse> getById(@PathVariable Long id) {
+        return ApiResult.success(SysUserResponse.from(userService.getById(id)));
     }
 
     /**
-     * Returns users matched by UserSearch conditions.
+     * Returns users matched by SysUserSearch conditions.
      */
     @PostMapping("/list")
-    public ApiResult<List<UserResponse>> queryList(@RequestBody(required = false) UserSearch search) {
-        return ApiResult.success(userService.queryList(search).stream().map(UserResponse::from).toList());
+    public ApiResult<List<SysUserResponse>> queryList(@RequestBody(required = false) SysUserSearch search) {
+        return ApiResult.success(userService.queryList(search).stream().map(SysUserResponse::from).toList());
     }
 
     /**
-     * Returns a page of users matched by UserSearch conditions.
+     * Returns a page of users matched by SysUserSearch conditions.
      */
     @PostMapping("/page")
-    public ApiResult<Page<UserResponse>> queryPageList(@RequestBody(required = false) UserSearch search) {
-        Page<User> userPage = userService.queryPageList(search);
-        Page<UserResponse> responsePage = new Page<>(userPage.getCurrent(), userPage.getSize(), userPage.getTotal());
-        responsePage.setRecords(userPage.getRecords().stream().map(UserResponse::from).toList());
+    public ApiResult<Page<SysUserResponse>> queryPageList(@RequestBody(required = false) SysUserSearch search) {
+        Page<SysUser> userPage = userService.queryPageList(search);
+        Page<SysUserResponse> responsePage = new Page<>(userPage.getCurrent(), userPage.getSize(), userPage.getTotal());
+        responsePage.setRecords(userPage.getRecords().stream().map(SysUserResponse::from).toList());
         responsePage.setPages(userPage.getPages());
         return ApiResult.success(responsePage);
     }

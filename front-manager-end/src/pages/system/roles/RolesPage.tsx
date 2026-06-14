@@ -1,22 +1,22 @@
 import { FormEvent, useEffect, useState } from "react";
-import { deleteRole, getPermissions, getRolePermissions, getRoles, saveRole, saveRolePermissions } from "../../../api/apiClient";
+import { deleteSysRole, getSysMenus, getSysRoleMenus, getSysRoles, saveSysRole, saveSysRoleMenus } from "../../../api/apiClient";
 import { formatMessage, useI18n } from "../../../i18n/I18nContext";
-import type { Permission, Role } from "../../../types";
+import type { SysMenu, SysRole } from "../../../types";
 
-const emptyRole: Role = { roleName: "", description: "" };
+const emptyRole: SysRole = { roleName: "", description: "" };
 
 export function RolesPage() {
   const { t } = useI18n();
-  const [roles, setRoles] = useState<Role[]>([]);
-  const [permissions, setPermissions] = useState<Permission[]>([]);
-  const [form, setForm] = useState<Role>(emptyRole);
-  const [selectedRole, setSelectedRole] = useState<Role | null>(null);
+  const [roles, setRoles] = useState<SysRole[]>([]);
+  const [permissions, setPermissions] = useState<SysMenu[]>([]);
+  const [form, setForm] = useState<SysRole>(emptyRole);
+  const [selectedRole, setSelectedRole] = useState<SysRole | null>(null);
   const [selectedPermissionIds, setSelectedPermissionIds] = useState<number[]>([]);
   const [error, setError] = useState("");
   const [message, setMessage] = useState("");
 
   async function load() {
-    const [rolePage, permissionPage] = await Promise.all([getRoles(), getPermissions()]);
+    const [rolePage, permissionPage] = await Promise.all([getSysRoles(), getSysMenus()]);
     setRoles(rolePage.records);
     setPermissions(permissionPage.records);
   }
@@ -27,26 +27,26 @@ export function RolesPage() {
 
   async function handleSubmit(event: FormEvent) {
     event.preventDefault();
-    await saveRole(form);
+    await saveSysRole(form);
     setForm(emptyRole);
     setMessage(t("roles.saved"));
     await load();
   }
 
-  async function openPermissions(role: Role) {
+  async function openPermissions(role: SysRole) {
     if (!role.id) {
       return;
     }
     setSelectedRole(role);
-    setSelectedPermissionIds(await getRolePermissions(role.id));
+    setSelectedPermissionIds(await getSysRoleMenus(role.id));
   }
 
-  function togglePermission(permissionId?: number) {
-    if (!permissionId) {
+  function togglePermission(sysMenuId?: number) {
+    if (!sysMenuId) {
       return;
     }
     setSelectedPermissionIds((current) =>
-      current.includes(permissionId) ? current.filter((id) => id !== permissionId) : [...current, permissionId],
+      current.includes(sysMenuId) ? current.filter((id) => id !== sysMenuId) : [...current, sysMenuId],
     );
   }
 
@@ -54,7 +54,7 @@ export function RolesPage() {
     if (!selectedRole?.id) {
       return;
     }
-    await saveRolePermissions(selectedRole.id, selectedPermissionIds);
+    await saveSysRoleMenus(selectedRole.id, selectedPermissionIds);
     setMessage(t("roles.permissionsSaved"));
   }
 
@@ -102,7 +102,7 @@ export function RolesPage() {
                 <button type="button" onClick={() => openPermissions(role).catch((exception) => setError(String(exception)))}>
                   {t("roles.permissions")}
                 </button>
-                <button className="danger" type="button" onClick={() => role.id && deleteRole(role.id).then(load)}>
+                <button className="danger" type="button" onClick={() => role.id && deleteSysRole(role.id).then(load)}>
                   {t("common.delete")}
                 </button>
               </td>

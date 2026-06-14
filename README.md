@@ -1,4 +1,4 @@
-# Knowledge Project
+﻿# Knowledge Project
 
 Knowledge Project is a multi-module knowledge base system scaffold. It includes
 Spring Boot APIs, a manager frontend, a public frontend placeholder, PostgreSQL
@@ -157,7 +157,7 @@ pnpm dev
 - Manager backend APIs live in `manager-api/`.
 - Manager API responses should use `ApiResult<T>`.
 - Manager frontend API calls should use `/api/...` and the Vite proxy in development.
-- Manager permissions are stored in `permissions` and assigned through `role_permission`.
+- Manager menus are stored in `sys_menu` and assigned through `sys_role_menu`.
 - Default manager routes use two-level paths such as `/system/users`.
 
 ## Useful Checks

@@ -1,9 +1,9 @@
 import { FormEvent, useEffect, useState } from "react";
-import { deletePermission, getPermissions, savePermission } from "../../../api/apiClient";
+import { deleteSysMenu, getSysMenus, saveSysMenu } from "../../../api/apiClient";
 import { formatMessage, useI18n } from "../../../i18n/I18nContext";
-import type { Permission } from "../../../types";
+import type { SysMenu } from "../../../types";
 
-const emptyPermission: Permission = {
+const emptyPermission: SysMenu = {
   name: "",
   url: "",
   parentId: undefined,
@@ -15,13 +15,13 @@ const emptyPermission: Permission = {
 
 export function PermissionsPage() {
   const { t } = useI18n();
-  const [permissions, setPermissions] = useState<Permission[]>([]);
-  const [form, setForm] = useState<Permission>(emptyPermission);
+  const [permissions, setPermissions] = useState<SysMenu[]>([]);
+  const [form, setForm] = useState<SysMenu>(emptyPermission);
   const [error, setError] = useState("");
   const [message, setMessage] = useState("");
 
   async function load() {
-    const page = await getPermissions();
+    const page = await getSysMenus();
     setPermissions(page.records);
   }
 
@@ -31,7 +31,7 @@ export function PermissionsPage() {
 
   async function handleSubmit(event: FormEvent) {
     event.preventDefault();
-    await savePermission({
+    await saveSysMenu({
       ...form,
       parentId: form.parentId ? Number(form.parentId) : undefined,
       isMenu: Boolean(form.isMenu),
@@ -123,7 +123,7 @@ export function PermissionsPage() {
                 <button type="button" onClick={() => setForm({ ...permission, isMenu: permission.isMenu ?? true, sortOrder: permission.sortOrder ?? 0 })}>
                   {t("common.edit")}
                 </button>
-                <button className="danger" type="button" onClick={() => permission.id && deletePermission(permission.id).then(load)}>
+                <button className="danger" type="button" onClick={() => permission.id && deleteSysMenu(permission.id).then(load)}>
                   {t("common.delete")}
                 </button>
               </td>

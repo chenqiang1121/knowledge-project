@@ -1,12 +1,12 @@
 package com.qiang.knowledge.service.search;
 
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
-import com.qiang.knowledge.service.entity.Permission;
+import com.qiang.knowledge.service.entity.SysMenu;
 
 /**
  * Search POJO for building reusable MyBatis-Plus permission query conditions.
  */
-public class PermissionSearch extends PageSearch {
+public class SysMenuSearch extends PageSearch {
 
     /** Optional exact permission id filter. */
     private Long id;
@@ -33,18 +33,18 @@ public class PermissionSearch extends PageSearch {
     private Boolean isDel;
 
     /** Builds the MyBatis-Plus lambda query wrapper for permission list queries. */
-    public LambdaQueryWrapper<Permission> build() {
-        LambdaQueryWrapper<Permission> queryWrapper = new LambdaQueryWrapper<>();
-        queryWrapper.eq(id != null, Permission::getId, id)
-                .like(hasText(name), Permission::getName, name)
-                .like(hasText(url), Permission::getUrl, url)
-                .eq(parentId != null, Permission::getParentId, parentId)
-                .eq(isMenu != null, Permission::getIsMenu, isMenu)
-                .like(hasText(routePath), Permission::getRoutePath, routePath)
-                .like(hasText(componentPath), Permission::getComponentPath, componentPath)
-                .eq(isDel != null, Permission::getIsDel, isDel)
-                .orderByAsc(Permission::getSortOrder)
-                .orderByAsc(Permission::getId);
+    public LambdaQueryWrapper<SysMenu> build() {
+        LambdaQueryWrapper<SysMenu> queryWrapper = new LambdaQueryWrapper<>();
+        queryWrapper.eq(id != null, SysMenu::getId, id)
+                .like(hasText(name), SysMenu::getName, name)
+                .like(hasText(url), SysMenu::getUrl, url)
+                .eq(parentId != null, SysMenu::getParentId, parentId)
+                .eq(isMenu != null, SysMenu::getIsMenu, isMenu)
+                .like(hasText(routePath), SysMenu::getRoutePath, routePath)
+                .like(hasText(componentPath), SysMenu::getComponentPath, componentPath)
+                .eq(isDel != null, SysMenu::getIsDel, isDel)
+                .orderByAsc(SysMenu::getSortOrder)
+                .orderByAsc(SysMenu::getId);
         return queryWrapper;
     }
 

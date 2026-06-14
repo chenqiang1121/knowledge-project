@@ -13,17 +13,17 @@ export interface PageResult<T> {
   pages: number;
 }
 
-export interface User {
+export interface SysUser {
   id?: number;
   username: string;
   password?: string;
-  roleId?: number;
+  sysRoleId?: number;
   createTime?: string;
   updateTime?: string;
   isDel?: boolean;
 }
 
-export interface Role {
+export interface SysRole {
   id?: number;
   roleName: string;
   description?: string;
@@ -32,7 +32,7 @@ export interface Role {
   isDel?: boolean;
 }
 
-export interface Permission {
+export interface SysMenu {
   id?: number;
   name: string;
   url?: string;
@@ -44,10 +44,10 @@ export interface Permission {
   createTime?: string;
   updateTime?: string;
   isDel?: boolean;
-  children?: Permission[];
+  children?: SysMenu[];
 }
 
 export interface LoginResponse {
   token: string;
-  user: User;
+  user: SysUser;
 }

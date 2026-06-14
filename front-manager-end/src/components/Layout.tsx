@@ -1,11 +1,11 @@
 import { useEffect, useState } from "react";
 import { NavLink, Outlet, useLocation, useNavigate } from "react-router-dom";
-import { getMenuTree } from "../api/apiClient";
+import { getSysMenuTree } from "../api/apiClient";
 import { useI18n } from "../i18n/I18nContext";
 import { useAuth } from "../state/AuthContext";
-import type { Permission } from "../types";
+import type { SysMenu } from "../types";
 
-function hasActiveChild(menu: Permission, pathname: string): boolean {
+function hasActiveChild(menu: SysMenu, pathname: string): boolean {
   return Boolean(menu.children?.some((child) => child.routePath === pathname || hasActiveChild(child, pathname)));
 }
 
@@ -14,14 +14,14 @@ export function Layout() {
   const { locale, setLocale, t } = useI18n();
   const location = useLocation();
   const navigate = useNavigate();
-  const [menus, setMenus] = useState<Permission[]>([]);
+  const [menus, setMenus] = useState<SysMenu[]>([]);
   const [openMenuIds, setOpenMenuIds] = useState<number[]>([]);
   const [menuError, setMenuError] = useState("");
 
   useEffect(() => {
     let isMounted = true;
 
-    getMenuTree()
+    getSysMenuTree()
       .then((tree) => {
         if (!isMounted) {
           return;
@@ -54,7 +54,7 @@ export function Layout() {
     setOpenMenuIds((current) => (current.includes(menuId) ? current.filter((id) => id !== menuId) : [...current, menuId]));
   }
 
-  function renderMenu(menu: Permission, depth = 0) {
+  function renderMenu(menu: SysMenu, depth = 0) {
     const children = menu.children ?? [];
     const hasChildren = children.length > 0;
     const isActive = menu.routePath === location.pathname || hasActiveChild(menu, location.pathname);

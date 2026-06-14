@@ -8,13 +8,13 @@ import com.baomidou.mybatisplus.annotation.TableName;
 import java.time.LocalDateTime;
 
 /**
- * User table entity for account credentials, role ownership, audit timestamps,
+ * SysUser table entity for account credentials, role ownership, audit timestamps,
  * and logical deletion state.
  */
-@TableName("users")
-public class User {
+@TableName("sys_user")
+public class SysUser {
 
-    /** User primary key. */
+    /** SysUser primary key. */
     @TableId(type = IdType.AUTO)
     private Long id;
 
@@ -24,8 +24,8 @@ public class User {
     /** Stored user password value. */
     private String password;
 
-    /** Role id assigned to the user. */
-    private Long roleId;
+    /** SysRole id assigned to the user. */
+    private Long sysRoleId;
 
     /** Time when the user row was created. */
     private LocalDateTime createTime;
@@ -68,13 +68,13 @@ public class User {
     }
 
     /** Returns the role id assigned to the user. */
-    public Long getRoleId() {
-        return roleId;
+    public Long getSysRoleId() {
+        return sysRoleId;
     }
 
     /** Sets the role id assigned to the user. */
-    public void setRoleId(Long roleId) {
-        this.roleId = roleId;
+    public void setSysRoleId(Long sysRoleId) {
+        this.sysRoleId = sysRoleId;
     }
 
     /** Returns the time when the user row was created. */

@@ -1,11 +1,11 @@
 package com.qiang.knowledge.service.service;
 
 import com.qiang.knowledge.service.common.ApiResult;
-import com.qiang.knowledge.service.entity.Role;
-import com.qiang.knowledge.service.entity.RolePermission;
-import com.qiang.knowledge.service.mapper.RoleMapper;
-import com.qiang.knowledge.service.mapper.RolePermissionMapper;
-import com.qiang.knowledge.service.search.RoleSearch;
+import com.qiang.knowledge.service.entity.SysRole;
+import com.qiang.knowledge.service.entity.SysRoleMenu;
+import com.qiang.knowledge.service.mapper.SysRoleMapper;
+import com.qiang.knowledge.service.mapper.SysRoleMenuMapper;
+import com.qiang.knowledge.service.search.SysRoleSearch;
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
@@ -16,26 +16,26 @@ import java.util.List;
 import java.util.Objects;
 
 /**
- * Custom role service that coordinates role persistence through RoleMapper
+ * Custom role service that coordinates role persistence through SysRoleMapper
  * without extending the MyBatis-Plus default service implementation.
  */
 @Service
-public class RoleService {
+public class SysRoleService {
 
     /**
      * Mapper used for roles table persistence operations.
      */
-    private final RoleMapper roleMapper;
+    private final SysRoleMapper roleMapper;
 
     /**
      * Mapper used for role-permission relation persistence operations.
      */
-    private final RolePermissionMapper rolePermissionMapper;
+    private final SysRoleMenuMapper rolePermissionMapper;
 
     /**
      * Builds the role service with its required mapper dependency.
      */
-    public RoleService(RoleMapper roleMapper, RolePermissionMapper rolePermissionMapper) {
+    public SysRoleService(SysRoleMapper roleMapper, SysRoleMenuMapper rolePermissionMapper) {
         this.roleMapper = roleMapper;
         this.rolePermissionMapper = rolePermissionMapper;
     }
@@ -43,21 +43,21 @@ public class RoleService {
     /**
      * Inserts a new role and returns the affected row count for business wrapping.
      */
-    public ApiResult<Integer> create(Role role) {
+    public ApiResult<Integer> create(SysRole role) {
         return ApiResult.success(roleMapper.insert(role));
     }
 
     /**
      * Updates an existing role by id and returns the affected row count.
      */
-    public ApiResult<Integer> update(Role role) {
+    public ApiResult<Integer> update(SysRole role) {
         return ApiResult.success(roleMapper.updateById(role));
     }
 
     /**
      * Finds a single role by primary key.
      */
-    public Role getById(Long id) {
+    public SysRole getById(Long id) {
         return roleMapper.selectById(id);
     }
 
@@ -69,30 +69,30 @@ public class RoleService {
     }
 
     /**
-     * Queries roles with conditions built by RoleSearch.
+     * Queries roles with conditions built by SysRoleSearch.
      */
-    public List<Role> queryList(RoleSearch search) {
-        RoleSearch realSearch = search == null ? new RoleSearch() : search;
+    public List<SysRole> queryList(SysRoleSearch search) {
+        SysRoleSearch realSearch = search == null ? new SysRoleSearch() : search;
         return roleMapper.selectList(realSearch.build());
     }
 
     /**
-     * Queries a page of roles with conditions built by RoleSearch.
+     * Queries a page of roles with conditions built by SysRoleSearch.
      */
-    public Page<Role> queryPageList(RoleSearch search) {
-        RoleSearch realSearch = search == null ? new RoleSearch() : search;
-        Page<Role> page = new Page<>(realSearch.getPageIndex(), realSearch.getPageSize());
+    public Page<SysRole> queryPageList(SysRoleSearch search) {
+        SysRoleSearch realSearch = search == null ? new SysRoleSearch() : search;
+        Page<SysRole> page = new Page<>(realSearch.getPageIndex(), realSearch.getPageSize());
         return roleMapper.selectPage(page, realSearch.build());
     }
 
     /**
      * Returns permission ids currently assigned to a role.
      */
-    public List<Long> queryPermissionIds(Long roleId) {
-        LambdaQueryWrapper<RolePermission> queryWrapper = new LambdaQueryWrapper<>();
-        queryWrapper.eq(RolePermission::getRoleId, roleId);
+    public List<Long> querySysMenuIds(Long sysRoleId) {
+        LambdaQueryWrapper<SysRoleMenu> queryWrapper = new LambdaQueryWrapper<>();
+        queryWrapper.eq(SysRoleMenu::getSysRoleId, sysRoleId);
         return rolePermissionMapper.selectList(queryWrapper).stream()
-                .map(RolePermission::getPermissionId)
+                .map(SysRoleMenu::getSysMenuId)
                 .filter(Objects::nonNull)
                 .toList();
     }
@@ -101,15 +101,15 @@ public class RoleService {
      * Replaces all permission assignments for a role and returns affected rows.
      */
     @Transactional
-    public ApiResult<Integer> replacePermissionIds(Long roleId, List<Long> permissionIds) {
-        QueryWrapper<RolePermission> deleteWrapper = new QueryWrapper<>();
-        deleteWrapper.eq("role_id", roleId);
+    public ApiResult<Integer> replaceSysMenuIds(Long sysRoleId, List<Long> sysMenuIds) {
+        QueryWrapper<SysRoleMenu> deleteWrapper = new QueryWrapper<>();
+        deleteWrapper.eq("sys_role_id", sysRoleId);
         int affectedRows = rolePermissionMapper.delete(deleteWrapper);
-        if (permissionIds != null) {
-            for (Long permissionId : permissionIds.stream().filter(Objects::nonNull).distinct().toList()) {
-                RolePermission relation = new RolePermission();
-                relation.setRoleId(roleId);
-                relation.setPermissionId(permissionId);
+        if (sysMenuIds != null) {
+            for (Long sysMenuId : sysMenuIds.stream().filter(Objects::nonNull).distinct().toList()) {
+                SysRoleMenu relation = new SysRoleMenu();
+                relation.setSysRoleId(sysRoleId);
+                relation.setSysMenuId(sysMenuId);
                 affectedRows += rolePermissionMapper.insert(relation);
             }
         }
