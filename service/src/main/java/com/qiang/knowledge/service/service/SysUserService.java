@@ -21,18 +21,21 @@ public class SysUserService {
      * Mapper used for users table persistence operations.
      */
     private final SysUserMapper userMapper;
+    private final PasswordService passwordService;
 
     /**
      * Builds the user service with its required mapper dependency.
      */
-    public SysUserService(SysUserMapper userMapper) {
+    public SysUserService(SysUserMapper userMapper, PasswordService passwordService) {
         this.userMapper = userMapper;
+        this.passwordService = passwordService;
     }
 
     /**
      * Inserts a new user and returns the affected row count for business wrapping.
      */
     public ApiResult<Integer> create(SysUser user) {
+        user.setPassword(passwordService.encode(user.getPassword()));
         return ApiResult.success(userMapper.insert(user));
     }
 
@@ -40,7 +43,19 @@ public class SysUserService {
      * Updates an existing user by id and returns the affected row count.
      */
     public ApiResult<Integer> update(SysUser user) {
+        if (user.getPassword() == null || user.getPassword().isBlank()) {
+            user.setPassword(null);
+        } else {
+            user.setPassword(passwordService.encode(user.getPassword()));
+        }
         return ApiResult.success(userMapper.updateById(user));
+    }
+
+    /**
+     * Returns whether a submitted password matches the stored password hash.
+     */
+    public boolean passwordMatches(String rawPassword, String encodedPassword) {
+        return passwordService.matches(rawPassword, encodedPassword);
     }
 
     /**

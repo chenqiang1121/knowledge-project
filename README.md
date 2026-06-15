@@ -55,6 +55,10 @@ username: admin
 password: admin123
 ```
 
+The default admin password is stored as a salted SHA-256 hash. The salt is
+configured with `knowledge.security.password-salt` or `PASSWORD_SALT`, defaulting
+to `knowledge-project-default-salt`.
+
 Default local Redis settings:
 
 ```text

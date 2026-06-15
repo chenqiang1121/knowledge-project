@@ -38,7 +38,7 @@ public class ManagerController {
             return ApiResult.error(400, "username and password are required");
         }
         SysUser user = userService.getByUsername(request.getUsername().trim());
-        if (user == null || user.getPassword() == null || !user.getPassword().equals(request.getPassword())) {
+        if (user == null || !userService.passwordMatches(request.getPassword(), user.getPassword())) {
             return ApiResult.error(401, "invalid username or password");
         }
         StpUtil.login(user.getId());

@@ -238,10 +238,10 @@ BEGIN
 
     IF admin_user_id IS NULL THEN
         INSERT INTO sys_user (username, password, sys_role_id, create_time, update_time, is_del)
-        VALUES ('admin', 'admin123', super_admin_sys_role_id, CURRENT_TIMESTAMP, CURRENT_TIMESTAMP, FALSE);
+        VALUES ('admin', 'c3b5345dcc2d271ce9ce114ce673c96599ef3f560795a4fb009c4c89c5370300', super_admin_sys_role_id, CURRENT_TIMESTAMP, CURRENT_TIMESTAMP, FALSE);
     ELSE
         UPDATE sys_user
-        SET password = 'admin123',
+        SET password = 'c3b5345dcc2d271ce9ce114ce673c96599ef3f560795a4fb009c4c89c5370300',
             sys_role_id = super_admin_sys_role_id,
             update_time = CURRENT_TIMESTAMP,
             is_del = FALSE

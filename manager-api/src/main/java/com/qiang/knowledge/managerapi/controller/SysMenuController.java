@@ -51,7 +51,7 @@ public class SysMenuController {
     /**
      * Deletes a permission logically by id and returns the affected row count.
      */
-    @DeleteMapping("/{id}")
+    @DeleteMapping("/{id:\\d+}")
     public ApiResult<Integer> deleteById(@PathVariable Long id) {
         return permissionService.deleteById(id);
     }
@@ -59,7 +59,7 @@ public class SysMenuController {
     /**
      * Returns a permission detail by id.
      */
-    @GetMapping("/{id}")
+    @GetMapping("/{id:\\d+}")
     public ApiResult<SysMenu> getById(@PathVariable Long id) {
         return ApiResult.success(permissionService.getById(id));
     }
@@ -67,7 +67,7 @@ public class SysMenuController {
     /**
      * Returns the current manager user's role-filtered menu tree.
      */
-    @GetMapping("/menu")
+    @GetMapping("/tree")
     public ApiResult<List<SysMenu>> queryCurrentUserMenuTree() {
         return ApiResult.success(permissionService.queryCurrentUserMenuTree());
     }

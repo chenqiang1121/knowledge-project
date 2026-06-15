@@ -1,8 +1,17 @@
-import type { ApiResult, LoginResponse, PageResult, SysMenu, SysRole, SysUser } from "../types";
+﻿import type { ApiResult, LoginResponse, PageResult, SysMenu, SysRole, SysUser } from "../types";
 
 const API_BASE_URL = import.meta.env.VITE_API_BASE_URL ?? "";
 const TOKEN_KEY = "knowledge_manager_token";
+const USER_KEY = "knowledge_manager_user";
 const LOCALE_KEY = "knowledge_locale";
+const AUTH_EXPIRED_EVENT = "knowledge_manager_auth_expired";
+
+export class AuthenticationError extends Error {
+  constructor(message: string) {
+    super(message);
+    this.name = "AuthenticationError";
+  }
+}
 
 export function getStoredToken() {
   return localStorage.getItem(TOKEN_KEY);
@@ -14,10 +23,35 @@ export function setStoredToken(token: string) {
 
 export function clearStoredToken() {
   localStorage.removeItem(TOKEN_KEY);
+  localStorage.removeItem(USER_KEY);
+}
+
+export function getStoredUser() {
+  return localStorage.getItem(USER_KEY);
+}
+
+export function setStoredUser(user: unknown) {
+  localStorage.setItem(USER_KEY, JSON.stringify(user));
+}
+
+export function notifyAuthenticationExpired() {
+  window.dispatchEvent(new Event(AUTH_EXPIRED_EVENT));
+}
+
+export function subscribeAuthenticationExpired(listener: () => void) {
+  window.addEventListener(AUTH_EXPIRED_EVENT, listener);
+  return () => window.removeEventListener(AUTH_EXPIRED_EVENT, listener);
 }
 
 function getRequestFailedMessage(status: number) {
-  return localStorage.getItem(LOCALE_KEY) === "zh-CN" ? `璇锋眰澶辫触锛岀姸鎬佺爜 ${status}` : `Request failed with status ${status}`;
+  return localStorage.getItem(LOCALE_KEY) === "zh-CN" ? `请求失败，状态码 ${status}` : `Request failed with status ${status}`;
+}
+
+function isAuthenticationFailure(path: string, status: number, message = "") {
+  if (path === "/api/auth/login") {
+    return false;
+  }
+  return status === 401 || status === 403 || message.includes("token required") || message.includes("token 无效");
 }
 
 async function request<T>(path: string, options: RequestInit = {}): Promise<T> {
@@ -31,7 +65,13 @@ async function request<T>(path: string, options: RequestInit = {}): Promise<T> {
   const response = await fetch(`${API_BASE_URL}${path}`, { ...options, headers });
   const result = (await response.json()) as ApiResult<T>;
   if (!response.ok || !(result.success || result.code === 0)) {
-    throw new Error(result.message || getRequestFailedMessage(response.status));
+    const message = result.message || getRequestFailedMessage(response.status);
+    if (isAuthenticationFailure(path, response.status, message)) {
+      clearStoredToken();
+      notifyAuthenticationExpired();
+      throw new AuthenticationError(message);
+    }
+    throw new Error(message);
   }
   return result.data;
 }
