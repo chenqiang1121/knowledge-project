@@ -1,17 +1,23 @@
 import type { LoginResponse, SysUser } from "../types";
-import { request } from "./request";
+import { ApiClient, AuthenticationError } from "./apiClient";
 
-export function login(username: string, password: string) {
-  return request<LoginResponse>("/api/auth/login", {
-    method: "POST",
-    body: JSON.stringify({ username, password }),
-  });
-}
+export class AuthApi {
+  static login(username: string, password: string) {
+    return ApiClient.request<LoginResponse>("/api/auth/login", {
+      method: "POST",
+      body: JSON.stringify({ username, password }),
+    });
+  }
 
-export function logout() {
-  return request<void>("/api/auth/logout", { method: "POST" });
-}
+  static logout() {
+    return ApiClient.request<void>("/api/auth/logout", { method: "POST" });
+  }
 
-export function getCurrentUser() {
-  return request<SysUser>("/api/auth/me");
+  static getCurrentUser() {
+    return ApiClient.request<SysUser>("/api/auth/me");
+  }
+
+  static isAuthenticationError(error: unknown) {
+    return error instanceof AuthenticationError;
+  }
 }

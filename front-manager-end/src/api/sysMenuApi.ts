@@ -1,22 +1,24 @@
 import type { PageResult, SysMenu } from "../types";
-import { request } from "./request";
+import { ApiClient } from "./apiClient";
 
-export function getSysMenus(pageIndex = 1, pageSize = 100) {
-  return request<PageResult<SysMenu>>("/api/sys-menu/page", {
-    method: "POST",
-    body: JSON.stringify({ pageIndex, pageSize, isDel: false }),
-  });
-}
+export class SysMenuApi {
+  static getSysMenus(pageIndex = 1, pageSize = 100) {
+    return ApiClient.request<PageResult<SysMenu>>("/api/sys-menu/page", {
+      method: "POST",
+      body: JSON.stringify({ pageIndex, pageSize, isDel: false }),
+    });
+  }
 
-export function getSysMenuTree() {
-  return request<SysMenu[]>("/api/sys-menu/tree");
-}
+  static getSysMenuTree() {
+    return ApiClient.request<SysMenu[]>("/api/sys-menu/tree");
+  }
 
-export function saveSysMenu(permission: SysMenu) {
-  const method = permission.id ? "PUT" : "POST";
-  return request<number>("/api/sys-menu", { method, body: JSON.stringify(permission) });
-}
+  static saveSysMenu(permission: SysMenu) {
+    const method = permission.id ? "PUT" : "POST";
+    return ApiClient.request<number>("/api/sys-menu", { method, body: JSON.stringify(permission) });
+  }
 
-export function deleteSysMenu(id: number) {
-  return request<number>(`/api/sys-menu/${id}`, { method: "DELETE" });
+  static deleteSysMenu(id: number) {
+    return ApiClient.request<number>(`/api/sys-menu/${id}`, { method: "DELETE" });
+  }
 }

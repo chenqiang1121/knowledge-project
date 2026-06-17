@@ -1,5 +1,6 @@
 import { FormEvent, useEffect, useState } from "react";
-import { deleteSysRole, getSysMenus, getSysRoleMenus, getSysRoles, saveSysRole, saveSysRoleMenus } from "../../../api/apiClient";
+import { SysMenuApi } from "../../../api/sysMenuApi";
+import { SysRoleApi } from "../../../api/sysRoleApi";
 import { formatMessage, useI18n } from "../../../i18n/I18nContext";
 import type { SysMenu, SysRole } from "../../../types";
 
@@ -16,7 +17,7 @@ export function RolesPage() {
   const [message, setMessage] = useState("");
 
   async function load() {
-    const [rolePage, permissionPage] = await Promise.all([getSysRoles(), getSysMenus()]);
+    const [rolePage, permissionPage] = await Promise.all([SysRoleApi.getSysRoles(), SysMenuApi.getSysMenus()]);
     setRoles(rolePage.records);
     setPermissions(permissionPage.records);
   }
@@ -27,7 +28,7 @@ export function RolesPage() {
 
   async function handleSubmit(event: FormEvent) {
     event.preventDefault();
-    await saveSysRole(form);
+    await SysRoleApi.saveSysRole(form);
     setForm(emptyRole);
     setMessage(t("roles.saved"));
     await load();
@@ -38,7 +39,7 @@ export function RolesPage() {
       return;
     }
     setSelectedRole(role);
-    setSelectedPermissionIds(await getSysRoleMenus(role.id));
+    setSelectedPermissionIds(await SysRoleApi.getSysRoleMenus(role.id));
   }
 
   function togglePermission(sysMenuId?: number) {
@@ -54,7 +55,7 @@ export function RolesPage() {
     if (!selectedRole?.id) {
       return;
     }
-    await saveSysRoleMenus(selectedRole.id, selectedPermissionIds);
+    await SysRoleApi.saveSysRoleMenus(selectedRole.id, selectedPermissionIds);
     setMessage(t("roles.permissionsSaved"));
   }
 
@@ -102,7 +103,7 @@ export function RolesPage() {
                 <button type="button" onClick={() => openPermissions(role).catch((exception) => setError(String(exception)))}>
                   {t("roles.permissions")}
                 </button>
-                <button className="danger" type="button" onClick={() => role.id && deleteSysRole(role.id).then(load)}>
+                <button className="danger" type="button" onClick={() => role.id && SysRoleApi.deleteSysRole(role.id).then(load)}>
                   {t("common.delete")}
                 </button>
               </td>

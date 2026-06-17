@@ -1,13 +1,6 @@
 import { createContext, ReactNode, useContext, useEffect, useMemo, useState } from "react";
-import {
-  clearStoredToken,
-  getStoredUser,
-  login as loginRequest,
-  logout as logoutRequest,
-  setStoredToken,
-  setStoredUser,
-  subscribeAuthenticationExpired,
-} from "../api/apiClient";
+import { AuthApi } from "../api/authApi";
+import { AuthStorage } from "../api/authStorage";
 import type { SysUser } from "../types";
 
 interface AuthContextValue {
@@ -23,30 +16,30 @@ const AuthContext = createContext<AuthContextValue | null>(null);
 export function AuthProvider({ children }: { children: ReactNode }) {
   const [token, setToken] = useState<string | null>(() => localStorage.getItem("knowledge_manager_token"));
   const [user, setUser] = useState<SysUser | null>(() => {
-    const raw = getStoredUser();
+    const raw = AuthStorage.getStoredUser();
     return raw ? (JSON.parse(raw) as SysUser) : null;
   });
 
   useEffect(() => {
-    return subscribeAuthenticationExpired(() => {
+    return AuthStorage.subscribeAuthenticationExpired(() => {
       setToken(null);
       setUser(null);
     });
   }, []);
 
   async function login(username: string, password: string) {
-    const response = await loginRequest(username, password);
-    setStoredToken(response.token);
-    setStoredUser(response.user);
+    const response = await AuthApi.login(username, password);
+    AuthStorage.setStoredToken(response.token);
+    AuthStorage.setStoredUser(response.user);
     setToken(response.token);
     setUser(response.user);
   }
 
   async function logout() {
     try {
-      await logoutRequest();
+      await AuthApi.logout();
     } finally {
-      clearStoredToken();
+      AuthStorage.clearStoredToken();
       setToken(null);
       setUser(null);
     }

@@ -1,6 +1,7 @@
 import {ComponentType, lazy, Suspense, useEffect, useMemo, useRef, useState} from "react";
 import {Navigate, Route, Routes, useNavigate} from "react-router-dom";
-import {AuthenticationError, getSysMenuTree} from "./api/apiClient";
+import {AuthApi} from "./api/authApi";
+import {SysMenuApi} from "./api/sysMenuApi";
 import {ProtectedRoute} from "./components/ProtectedRoute";
 import {Layout} from "./components/Layout";
 import {IndexPage} from "./pages/index/IndexPage";
@@ -125,7 +126,7 @@ export default function App() {
 
         let isMounted = true;
 
-        getSysMenuTree()
+        SysMenuApi.getSysMenuTree()
             .then((tree) => {
                 if (!isMounted) {
                     return;
@@ -134,7 +135,7 @@ export default function App() {
                 setMenuError("");
             })
             .catch((exception) => {
-                if (exception instanceof AuthenticationError) {
+                if (AuthApi.isAuthenticationError(exception)) {
                     navigateRef.current("/login", {replace: true});
                     return;
                 }

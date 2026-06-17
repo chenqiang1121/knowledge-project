@@ -1,5 +1,5 @@
 import { FormEvent, useEffect, useMemo, useState } from "react";
-import { deleteSysMenu, getSysMenus, saveSysMenu } from "../../../api/apiClient";
+import { SysMenuApi } from "../../../api/sysMenuApi";
 import { useI18n } from "../../../i18n/I18nContext";
 import type { SysMenu } from "../../../types";
 
@@ -67,7 +67,7 @@ export function PermissionsPage() {
   );
 
   async function load() {
-    const page = await getSysMenus();
+    const page = await SysMenuApi.getSysMenus();
     setPermissions(page.records);
   }
 
@@ -131,7 +131,7 @@ export function PermissionsPage() {
   async function handleSubmit(event: FormEvent) {
     event.preventDefault();
     const nextMenuType = (form.menuType ?? "MENU") as MenuType;
-    await saveSysMenu({
+    await SysMenuApi.saveSysMenu({
       ...form,
       parentId: form.parentId ? Number(form.parentId) : null,
       isMenu: nextMenuType !== "BUTTON",
@@ -240,7 +240,7 @@ export function PermissionsPage() {
                   <button type="button" onClick={() => openEditDialog(permission)}>
                     编辑
                   </button>
-                  <button className="danger" type="button" onClick={() => permission.id && deleteSysMenu(permission.id).then(load)}>
+                  <button className="danger" type="button" onClick={() => permission.id && SysMenuApi.deleteSysMenu(permission.id).then(load)}>
                     删除
                   </button>
                 </td>

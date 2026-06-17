@@ -1,5 +1,6 @@
 import { FormEvent, useEffect, useState } from "react";
-import { deleteSysUser, getSysRoles, getSysUsers, saveSysUser } from "../../../api/apiClient";
+import { SysRoleApi } from "../../../api/sysRoleApi";
+import { SysUserApi } from "../../../api/sysUserApi";
 import { formatMessage, useI18n } from "../../../i18n/I18nContext";
 import type { SysRole, SysUser } from "../../../types";
 
@@ -17,7 +18,7 @@ export function UsersPage() {
   const [error, setError] = useState("");
 
   async function load() {
-    const [userPage, rolePage] = await Promise.all([getSysUsers(), getSysRoles()]);
+    const [userPage, rolePage] = await Promise.all([SysUserApi.getSysUsers(), SysRoleApi.getSysRoles()]);
     setUsers(userPage.records);
     setRoles(rolePage.records);
   }
@@ -34,7 +35,7 @@ export function UsersPage() {
       delete payload.password;
     }
     try {
-      await saveSysUser(payload);
+      await SysUserApi.saveSysUser(payload);
       setForm(emptyUser);
       setMessage(t("users.saved"));
       await load();
@@ -47,7 +48,7 @@ export function UsersPage() {
     if (!id) {
       return;
     }
-    await deleteSysUser(id);
+    await SysUserApi.deleteSysUser(id);
     setMessage(t("users.userDeleted"));
     await load();
   }
