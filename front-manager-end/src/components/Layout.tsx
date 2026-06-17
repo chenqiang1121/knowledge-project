@@ -1,6 +1,5 @@
 import { MouseEvent, useEffect, useMemo, useState } from "react";
 import { NavLink, Outlet, useLocation, useNavigate } from "react-router-dom";
-import { AuthenticationError, getSysMenuTree } from "../api/apiClient";
 import { useI18n } from "../i18n/I18nContext";
 import { useAuth } from "../state/AuthContext";
 import type { SysMenu } from "../types";
@@ -31,6 +30,11 @@ interface TabItem {
   closable: boolean;
 }
 
+interface LayoutProps {
+  menus: SysMenu[];
+  menuError?: string;
+}
+
 function findMenuByPath(menus: SysMenu[], pathname: string): SysMenu | null {
   for (const menu of menus) {
     if (menu.routePath === pathname) {
@@ -44,48 +48,18 @@ function findMenuByPath(menus: SysMenu[], pathname: string): SysMenu | null {
   return null;
 }
 
-export function Layout() {
+export function Layout({ menus, menuError = "" }: LayoutProps) {
   const { user, logout } = useAuth();
   const { locale, setLocale, t } = useI18n();
   const location = useLocation();
   const navigate = useNavigate();
-  const [menus, setMenus] = useState<SysMenu[]>([]);
   const [openMenuIds, setOpenMenuIds] = useState<number[]>([]);
-  const [menuError, setMenuError] = useState("");
   const dashboardTab = useMemo<TabItem>(() => ({ path: "/", title: t("layout.dashboard"), closable: false }), [t]);
   const [tabs, setTabs] = useState<TabItem[]>([dashboardTab]);
 
   useEffect(() => {
     setTabs((current) => current.map((tab) => (tab.path === "/" ? dashboardTab : tab)));
   }, [dashboardTab]);
-
-  useEffect(() => {
-    let isMounted = true;
-
-    getSysMenuTree()
-      .then((tree) => {
-        if (!isMounted) {
-          return;
-        }
-        setMenus(tree);
-        setOpenMenuIds(tree.filter((menu) => hasActiveChild(menu, location.pathname)).map((menu) => menu.id).filter((id): id is number => Boolean(id)));
-        setMenuError("");
-      })
-      .catch((exception) => {
-        if (exception instanceof AuthenticationError) {
-          navigate("/login", { replace: true });
-          return;
-        }
-        console.error("Failed to load manager menus", exception);
-        if (isMounted) {
-          setMenuError(exception instanceof Error ? exception.message : "Failed to load menus");
-        }
-      });
-
-    return () => {
-      isMounted = false;
-    };
-  }, [location.pathname, navigate]);
 
   useEffect(() => {
     if (location.pathname === "/") {
@@ -136,14 +110,15 @@ export function Layout() {
   function renderMenu(menu: SysMenu, depth = 0) {
     const children = menu.children ?? [];
     const hasChildren = children.length > 0;
-    const isActive = menu.routePath === location.pathname || hasActiveChild(menu, location.pathname);
-    const isOpen = menu.id ? openMenuIds.includes(menu.id) || isActive : isActive;
+    const hasActiveDescendant = hasActiveChild(menu, location.pathname);
+    const isActive = menu.routePath === location.pathname;
+    const isOpen = menu.id ? openMenuIds.includes(menu.id) || hasActiveDescendant : hasActiveDescendant;
     const label = getMenuLabel(menu, t);
 
     if (hasChildren && !menu.routePath) {
       return (
         <div className="nav-group" key={menu.id ?? menu.name}>
-          <button className={`nav-parent${isActive ? " active" : ""}${isOpen ? " open" : ""}`} type="button" onClick={() => toggleMenu(menu.id)}>
+          <button className={`nav-parent${isOpen ? " open" : ""}`} type="button" onClick={() => toggleMenu(menu.id)}>
             <span>{label}</span>
             <span className="nav-parent-indicator" aria-hidden="true">
               &gt;
