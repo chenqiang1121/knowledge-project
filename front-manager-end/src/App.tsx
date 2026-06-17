@@ -1,4 +1,4 @@
-import {ComponentType, lazy, Suspense, useEffect, useMemo, useState} from "react";
+import {ComponentType, lazy, Suspense, useEffect, useMemo, useRef, useState} from "react";
 import {Navigate, Route, Routes, useNavigate} from "react-router-dom";
 import {AuthenticationError, getSysMenuTree} from "./api/apiClient";
 import {ProtectedRoute} from "./components/ProtectedRoute";
@@ -108,8 +108,13 @@ function flattenMenuRoutes(menus: SysMenu[]) {
 export default function App() {
     const {isAuthenticated} = useAuth();
     const navigate = useNavigate();
+    const navigateRef = useRef(navigate);
     const [menus, setMenus] = useState<SysMenu[]>([]);
     const [menuError, setMenuError] = useState("");
+
+    useEffect(() => {
+        navigateRef.current = navigate;
+    }, [navigate]);
 
     useEffect(() => {
         if (!isAuthenticated) {
@@ -130,7 +135,7 @@ export default function App() {
             })
             .catch((exception) => {
                 if (exception instanceof AuthenticationError) {
-                    navigate("/login", {replace: true});
+                    navigateRef.current("/login", {replace: true});
                     return;
                 }
                 console.error("Failed to load manager menus", exception);
@@ -142,7 +147,7 @@ export default function App() {
         return () => {
             isMounted = false;
         };
-    }, [isAuthenticated, navigate]);
+    }, [isAuthenticated]);
 
     const menuRoutes = useMemo(() => {
         const seenPaths = new Set<string>();

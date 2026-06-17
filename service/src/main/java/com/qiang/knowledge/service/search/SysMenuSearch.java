@@ -23,11 +23,20 @@ public class SysMenuSearch extends PageSearch {
     /** Optional exact menu display filter. */
     private Boolean isMenu;
 
+    /** Optional exact menu type filter. */
+    private String menuType;
+
     /** Optional route path fuzzy-match filter. */
     private String routePath;
 
     /** Optional component path fuzzy-match filter. */
     private String componentPath;
+
+    /** Optional permission code fuzzy-match filter. */
+    private String permissionCode;
+
+    /** Optional visible state filter. */
+    private Boolean visible;
 
     /** Optional logical delete state filter. */
     private Boolean isDel;
@@ -40,8 +49,11 @@ public class SysMenuSearch extends PageSearch {
                 .like(hasText(url), SysMenu::getUrl, url)
                 .eq(parentId != null, SysMenu::getParentId, parentId)
                 .eq(isMenu != null, SysMenu::getIsMenu, isMenu)
+                .eq(hasText(menuType), SysMenu::getMenuType, menuType)
                 .like(hasText(routePath), SysMenu::getRoutePath, routePath)
                 .like(hasText(componentPath), SysMenu::getComponentPath, componentPath)
+                .like(hasText(permissionCode), SysMenu::getPermissionCode, permissionCode)
+                .eq(visible != null, SysMenu::getVisible, visible)
                 .eq(isDel != null, SysMenu::getIsDel, isDel)
                 .orderByAsc(SysMenu::getSortOrder)
                 .orderByAsc(SysMenu::getId);
@@ -103,6 +115,16 @@ public class SysMenuSearch extends PageSearch {
         this.isMenu = isMenu;
     }
 
+    /** Returns the optional exact menu type filter. */
+    public String getMenuType() {
+        return menuType;
+    }
+
+    /** Sets the optional exact menu type filter. */
+    public void setMenuType(String menuType) {
+        this.menuType = menuType;
+    }
+
     /** Returns the optional route path fuzzy-match filter. */
     public String getRoutePath() {
         return routePath;
@@ -121,6 +143,26 @@ public class SysMenuSearch extends PageSearch {
     /** Sets the optional component path fuzzy-match filter. */
     public void setComponentPath(String componentPath) {
         this.componentPath = componentPath;
+    }
+
+    /** Returns the optional permission code fuzzy-match filter. */
+    public String getPermissionCode() {
+        return permissionCode;
+    }
+
+    /** Sets the optional permission code fuzzy-match filter. */
+    public void setPermissionCode(String permissionCode) {
+        this.permissionCode = permissionCode;
+    }
+
+    /** Returns the optional visible state filter. */
+    public Boolean getVisible() {
+        return visible;
+    }
+
+    /** Sets the optional visible state filter. */
+    public void setVisible(Boolean visible) {
+        this.visible = visible;
     }
 
     /** Returns the optional logical delete state filter. */

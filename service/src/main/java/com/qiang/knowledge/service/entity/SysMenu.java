@@ -1,6 +1,7 @@
 package com.qiang.knowledge.service.entity;
 
 import com.baomidou.mybatisplus.annotation.IdType;
+import com.baomidou.mybatisplus.annotation.FieldStrategy;
 import com.baomidou.mybatisplus.annotation.TableField;
 import com.baomidou.mybatisplus.annotation.TableId;
 import com.baomidou.mybatisplus.annotation.TableLogic;
@@ -27,10 +28,14 @@ public class SysMenu {
     private String url;
 
     /** Parent permission id for menu hierarchies. */
+    @TableField(updateStrategy = FieldStrategy.ALWAYS)
     private Long parentId;
 
     /** Whether this permission should be shown as a manager menu item. */
     private Boolean isMenu;
+
+    /** Menu node type: DIR, MENU, or BUTTON. */
+    private String menuType;
 
     /** Sort order used when rendering menus. */
     private Integer sortOrder;
@@ -40,6 +45,21 @@ public class SysMenu {
 
     /** Frontend TSX source path used for management visibility. */
     private String componentPath;
+
+    /** Permission code used by backend authorization annotations. */
+    private String permissionCode;
+
+    /** Icon CSS class used by manager menu rendering. */
+    private String icon;
+
+    /** Whether the menu should be visible in management UI. */
+    private Boolean visible;
+
+    /** Whether the opened page should refresh instead of using cached content. */
+    private Boolean refresh;
+
+    /** Open target mode for page menus. */
+    private String openType;
 
     /** Time when the permission row was created. */
     private LocalDateTime createTime;
@@ -105,6 +125,16 @@ public class SysMenu {
         this.isMenu = isMenu;
     }
 
+    /** Returns the menu node type. */
+    public String getMenuType() {
+        return menuType;
+    }
+
+    /** Sets the menu node type. */
+    public void setMenuType(String menuType) {
+        this.menuType = menuType;
+    }
+
     /** Returns the sort order used when rendering menus. */
     public Integer getSortOrder() {
         return sortOrder;
@@ -133,6 +163,56 @@ public class SysMenu {
     /** Sets the frontend TSX source path. */
     public void setComponentPath(String componentPath) {
         this.componentPath = componentPath;
+    }
+
+    /** Returns the backend permission code. */
+    public String getPermissionCode() {
+        return permissionCode;
+    }
+
+    /** Sets the backend permission code. */
+    public void setPermissionCode(String permissionCode) {
+        this.permissionCode = permissionCode;
+    }
+
+    /** Returns the menu icon CSS class. */
+    public String getIcon() {
+        return icon;
+    }
+
+    /** Sets the menu icon CSS class. */
+    public void setIcon(String icon) {
+        this.icon = icon;
+    }
+
+    /** Returns whether the menu is visible. */
+    public Boolean getVisible() {
+        return visible;
+    }
+
+    /** Sets whether the menu is visible. */
+    public void setVisible(Boolean visible) {
+        this.visible = visible;
+    }
+
+    /** Returns whether page content should refresh. */
+    public Boolean getRefresh() {
+        return refresh;
+    }
+
+    /** Sets whether page content should refresh. */
+    public void setRefresh(Boolean refresh) {
+        this.refresh = refresh;
+    }
+
+    /** Returns the open target mode. */
+    public String getOpenType() {
+        return openType;
+    }
+
+    /** Sets the open target mode. */
+    public void setOpenType(String openType) {
+        this.openType = openType;
     }
 
     /** Returns the time when the permission row was created. */

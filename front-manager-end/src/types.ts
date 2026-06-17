@@ -36,11 +36,17 @@ export interface SysMenu {
   id?: number;
   name: string;
   url?: string;
-  parentId?: number;
+  parentId?: number | null;
   isMenu?: boolean;
+  menuType?: "DIR" | "MENU" | "BUTTON";
   sortOrder?: number;
   routePath?: string;
   componentPath?: string;
+  permissionCode?: string;
+  icon?: string;
+  visible?: boolean;
+  refresh?: boolean;
+  openType?: "TAB" | "CURRENT" | "NEW_WINDOW" | "";
   createTime?: string;
   updateTime?: string;
   isDel?: boolean;

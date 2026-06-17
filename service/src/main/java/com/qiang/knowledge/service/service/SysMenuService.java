@@ -123,6 +123,7 @@ public class SysMenuService {
         LambdaQueryWrapper<SysMenu> menuWrapper = new LambdaQueryWrapper<>();
         menuWrapper.in(SysMenu::getId, sysMenuIds)
                 .eq(SysMenu::getIsMenu, true)
+                .and(wrapper -> wrapper.eq(SysMenu::getVisible, true).or().isNull(SysMenu::getVisible))
                 .eq(SysMenu::getIsDel, false)
                 .orderByAsc(SysMenu::getSortOrder)
                 .orderByAsc(SysMenu::getId);
