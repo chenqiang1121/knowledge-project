@@ -3,6 +3,8 @@ import { SysMenuApi } from "../../../api/sysMenuApi";
 import { useI18n } from "../../../i18n/I18nContext";
 import type { SysMenu } from "../../../types";
 
+// http://localhost:5173/system/permissions  菜单界面的地址
+
 type MenuType = NonNullable<SysMenu["menuType"]>;
 
 const emptyPermission: SysMenu = {
@@ -21,6 +23,7 @@ const emptyPermission: SysMenu = {
   openType: "TAB",
 };
 
+// 根据菜单类型返回表格中展示的类型文案。
 function getMenuTypeLabel(menuType?: MenuType) {
   if (menuType === "DIR") {
     return "目录";
@@ -31,10 +34,12 @@ function getMenuTypeLabel(menuType?: MenuType) {
   return "菜单";
 }
 
+// 根据父级菜单 ID 查找父级菜单名称，找不到时回退展示 ID 或空值文案。
 function getParentName(permissions: SysMenu[], parentId?: number | null) {
   return permissions.find((item) => item.id === parentId)?.name ?? (parentId ? String(parentId) : "无");
 }
 
+// 兼容旧数据：优先使用 menuType，没有时通过 isMenu 和 routePath 推断类型。
 function inferMenuType(permission: SysMenu): MenuType {
   return permission.menuType ?? (permission.isMenu === false ? "BUTTON" : permission.routePath ? "MENU" : "DIR");
 }
@@ -66,6 +71,7 @@ export function PermissionsPage() {
     [filters.name, filters.visible, permissions],
   );
 
+  // 从服务端加载菜单权限列表，并同步到页面表格数据。
   async function load() {
     const page = await SysMenuApi.getSysMenus();
     setPermissions(page.records);
@@ -75,24 +81,29 @@ export function PermissionsPage() {
     load().catch((exception) => setError(exception instanceof Error ? exception.message : t("permissions.failedLoad")));
   }, [t]);
 
+  // 阻止查询表单默认提交，筛选逻辑由受控 filters 状态实时驱动。
   function handleSearch(event: FormEvent) {
     event.preventDefault();
   }
 
+  // 重置查询条件，恢复为展示全部菜单。
   function resetFilters() {
     setFilters({ name: "", visible: "ALL" });
   }
 
+  // 关闭编辑弹窗，并清空表单状态。
   function closeDialog() {
     setIsDialogOpen(false);
     setForm(emptyPermission);
   }
 
+  // 打开新增菜单弹窗，使用空白表单初始化。
   function openCreateDialog() {
     setForm(emptyPermission);
     setIsDialogOpen(true);
   }
 
+  // 打开编辑菜单弹窗，并补齐后端可能未返回的默认表单字段。
   function openEditDialog(permission: SysMenu) {
     const nextMenuType = inferMenuType(permission);
     setSelectedPermissionId(permission.id ?? null);
@@ -108,12 +119,14 @@ export function PermissionsPage() {
     setIsDialogOpen(true);
   }
 
+  // 编辑表格中当前单选选中的菜单。
   function openSelectedEditDialog() {
     if (selectedPermission) {
       openEditDialog(selectedPermission);
     }
   }
 
+  // 切换菜单类型时，同步清理当前类型不适用的表单字段。
   function updateMenuType(nextMenuType: MenuType) {
     setForm({
       ...form,
@@ -128,6 +141,7 @@ export function PermissionsPage() {
     });
   }
 
+  // 提交新增或编辑表单，按菜单类型整理字段后保存到服务端。
   async function handleSubmit(event: FormEvent) {
     event.preventDefault();
     const nextMenuType = (form.menuType ?? "MENU") as MenuType;
